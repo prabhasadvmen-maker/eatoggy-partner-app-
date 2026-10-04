@@ -6,94 +6,103 @@ import 'app_colors.dart';
 class AppTextStyles {
   AppTextStyles._();
 
-  // Headings using Fraunces
+  // Headings using Fraunces (Luxury Serif for Brand, Numbers & Headers)
   static TextStyle displayLarge = GoogleFonts.fraunces(
     fontSize: 22.sp,
     fontWeight: FontWeight.bold,
-    color: AppColors.goldFont,
+    color: AppColors.textPrimary,
     letterSpacing: -0.5,
   );
 
   static TextStyle headingLarge = GoogleFonts.fraunces(
     fontSize: 18.sp,
     fontWeight: FontWeight.bold,
-    color: AppColors.goldFont,
+    color: AppColors.textPrimary,
   );
 
   static TextStyle headingMedium = GoogleFonts.fraunces(
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimaryDark,
+    color: AppColors.textPrimary,
   );
 
   static TextStyle headingSmall = GoogleFonts.fraunces(
     fontSize: 15.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimaryDark,
+    color: AppColors.textPrimary,
   );
 
-  // Body and Labels using Geist
+  // Body and Labels using Geist (Clean Modern Sans-Serif)
   static TextStyle titleLarge = GoogleFonts.geist(
-    fontSize: 15.sp,
+    fontSize: 16.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimaryDark,
+    color: AppColors.textPrimary,
   );
 
   static TextStyle titleMedium = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 14.5.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimaryDark,
+    color: AppColors.textPrimary,
   );
 
   static TextStyle bodyLarge = GoogleFonts.geist(
-    fontSize: 15.sp,
+    fontSize: 14.5.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.textPrimaryDark,
+    color: AppColors.textPrimary,
   );
 
   static TextStyle bodyMedium = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 13.5.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.textSecondaryDark,
+    color: AppColors.textSecondary,
   );
 
   static TextStyle bodySmall = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 12.5.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.textSecondaryDark,
+    color: AppColors.textSecondary,
   );
 
   static TextStyle button = GoogleFonts.geist(
-    fontSize: 15.sp,
-    fontWeight: FontWeight.w700,
-    color: AppColors.darkBackground,
+    fontSize: 14.5.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textLight,
+    letterSpacing: 0.3,
   );
 
   static TextStyle caption = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    color: AppColors.textMutedDark,
+    color: AppColors.textSecondary,
   );
 
   static TextStyle label = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 11.5.sp,
     fontWeight: FontWeight.w700,
-    color: AppColors.goldFont,
-    letterSpacing: 1.2,
+    color: AppColors.textSecondary,
+    letterSpacing: 1.1,
+  );
+
+  // Currency & KPI Metrics
+  static TextStyle kpiMetric = GoogleFonts.fraunces(
+    fontSize: 22.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    letterSpacing: -0.5,
   );
 
   // Splash Screen specific text styles
   static TextStyle splashPartnerTitle = GoogleFonts.geist(
-    fontSize: 16.sp,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w700,
-    color: AppColors.goldFont,
-    letterSpacing: 1.8,
+    color: AppColors.textPrimary,
+    letterSpacing: 2.0,
   );
 
   static TextStyle splashSubtitle = GoogleFonts.geist(
-    fontSize: 14.sp,
+    fontSize: 13.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.goldFont.withValues(alpha: 0.65),
+    color: AppColors.textSecondary,
     letterSpacing: 0.5,
   );
 }

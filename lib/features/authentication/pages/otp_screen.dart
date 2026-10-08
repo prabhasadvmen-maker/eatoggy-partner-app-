@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../bloc/otp_bloc.dart';
 
 class OtpScreen extends StatelessWidget {
@@ -61,9 +62,8 @@ class _OtpViewState extends State<OtpView> {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    const borderColor = AppColors.darkBorder;
+    const bgColor = AppColors.background;
+    const borderColor = AppColors.border;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -75,23 +75,21 @@ class _OtpViewState extends State<OtpView> {
             }
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 2.h),
+                SizedBox(height: 3.h),
 
                 // Title & Subtitle using AppTextStyles
                 Text(
                   'Partner Entrance',
                   style: AppTextStyles.displayLarge,
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 1.2.h),
                 Text(
                   'Verify your mobile number',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
-                  ),
+                  style: AppTextStyles.bodyMedium,
                 ),
 
                 SizedBox(height: 4.h),
@@ -101,7 +99,7 @@ class _OtpViewState extends State<OtpView> {
                   'OTP SENT TO',
                   style: AppTextStyles.label,
                 ),
-                SizedBox(height: 0.8.h),
+                SizedBox(height: 1.h),
                 BlocBuilder<OtpBloc, OtpState>(
                   buildWhen: (p, c) => p.phone != c.phone,
                   builder: (context, state) {
@@ -115,7 +113,6 @@ class _OtpViewState extends State<OtpView> {
                             Text(
                               state.phone,
                               style: AppTextStyles.titleMedium.copyWith(
-                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -126,7 +123,7 @@ class _OtpViewState extends State<OtpView> {
                           child: Text(
                             'Change',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: goldColor,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -143,10 +140,10 @@ class _OtpViewState extends State<OtpView> {
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                   decoration: BoxDecoration(
-                    color: goldColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.primaryLight,
+                    borderRadius: AppRadius.borderMd,
                     border: Border.all(
-                      color: goldColor.withValues(alpha: 0.4),
+                      color: AppColors.primaryBorder,
                       width: 1,
                     ),
                   ),
@@ -154,21 +151,19 @@ class _OtpViewState extends State<OtpView> {
                     children: [
                       const Icon(
                         Icons.mark_email_read_outlined,
-                        color: goldColor,
+                        color: AppColors.primary,
                         size: 22,
                       ),
                       const SizedBox(width: 10),
                       Text.rich(
                         TextSpan(
                           text: 'Your OTP Code is: ',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: Colors.white70,
-                          ),
+                          style: AppTextStyles.bodyMedium,
                           children: [
                             TextSpan(
                               text: '5214',
                               style: AppTextStyles.titleMedium.copyWith(
-                                color: goldColor,
+                                color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 2.0,
                               ),
@@ -180,7 +175,7 @@ class _OtpViewState extends State<OtpView> {
                   ),
                 ),
 
-                SizedBox(height: 2.5.h),
+                SizedBox(height: 3.h),
 
                 // 4 OTP Boxes (Matches exact Figma reference)
                 BlocBuilder<OtpBloc, OtpState>(
@@ -198,25 +193,25 @@ class _OtpViewState extends State<OtpView> {
                               width: 18.w,
                               height: 18.w,
                               decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(16),
+                                color: AppColors.surface,
+                                borderRadius: AppRadius.borderLg,
                                 border: Border.all(
                                   color: hasError
                                       ? AppColors.error
                                       : isFocused || hasValue
-                                          ? goldColor
+                                          ? AppColors.primary
                                           : borderColor,
                                   width: isFocused || hasError || hasValue ? 1.5 : 1.0,
                                 ),
                                 boxShadow: isFocused
                                     ? [
                                         BoxShadow(
-                                          color: goldColor.withValues(alpha: 0.25),
+                                          color: AppColors.primary.withValues(alpha: 0.15),
                                           blurRadius: 8,
                                           spreadRadius: 1,
                                         )
                                       ]
-                                    : [],
+                                    : AppShadows.card,
                               ),
                               child: Center(
                                 child: TextField(
@@ -225,7 +220,7 @@ class _OtpViewState extends State<OtpView> {
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyles.headingLarge.copyWith(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontSize: 22.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -286,13 +281,13 @@ class _OtpViewState extends State<OtpView> {
                           TextSpan(
                             text: 'Resend OTP in ',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: Colors.white60,
+                              color: AppColors.textSecondary,
                             ),
                             children: [
                               TextSpan(
                                 text: timerStr,
                                 style: AppTextStyles.bodyMedium.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -311,7 +306,7 @@ class _OtpViewState extends State<OtpView> {
                           child: Text(
                             'Resend',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: state.canResend ? goldColor : Colors.white38,
+                              color: state.canResend ? AppColors.primary : AppColors.textMuted,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -326,48 +321,39 @@ class _OtpViewState extends State<OtpView> {
                 // Verify & Continue Button
                 BlocBuilder<OtpBloc, OtpState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              for (int i = 0; i < 4; i++) {
-                                context.read<OtpBloc>().add(OtpDigitChanged(i, _controllers[i].text));
-                              }
-                              context.read<OtpBloc>().add(const OtpSubmitted());
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.buttonHeight,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                for (int i = 0; i < 4; i++) {
+                                  context.read<OtpBloc>().add(OtpDigitChanged(i, _controllers[i].text));
+                                }
+                                context.read<OtpBloc>().add(const OtpSubmitted());
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.textLight,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Verify & Continue',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Verify & Continue',
+                                style: AppTextStyles.button,
+                              ),
                       ),
                     );
                   },
@@ -375,7 +361,7 @@ class _OtpViewState extends State<OtpView> {
 
                 SizedBox(height: 4.h),
                 const Divider(color: borderColor, height: 1),
-                SizedBox(height: 4.h),
+                SizedBox(height: 3.h),
 
                 // Terms of Service & Privacy Policy Footer
                 Center(
@@ -383,7 +369,7 @@ class _OtpViewState extends State<OtpView> {
                     children: [
                       Text(
                         "By proceeding, you agree to EATOGGY's",
-                        style: AppTextStyles.caption.copyWith(color: Colors.white54),
+                        style: AppTextStyles.caption,
                       ),
                       SizedBox(height: 0.4.h),
                       Row(
@@ -392,21 +378,19 @@ class _OtpViewState extends State<OtpView> {
                           Text(
                             'Terms of Service',
                             style: AppTextStyles.caption.copyWith(
-                              color: Colors.white70,
+                              color: AppColors.textPrimary,
                               decoration: TextDecoration.underline,
-                              decorationColor: Colors.white70,
                             ),
                           ),
                           Text(
                             ' & ',
-                            style: AppTextStyles.caption.copyWith(color: Colors.white54),
+                            style: AppTextStyles.caption,
                           ),
                           Text(
                             'Privacy Policy',
                             style: AppTextStyles.caption.copyWith(
-                              color: Colors.white70,
+                              color: AppColors.textPrimary,
                               decoration: TextDecoration.underline,
-                              decorationColor: Colors.white70,
                             ),
                           ),
                         ],

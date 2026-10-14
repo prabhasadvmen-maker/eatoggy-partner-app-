@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../../../shared/models/app_models.dart';
 import '../../bloc/home_bloc.dart';
 import '../../bloc/home_event.dart';
@@ -23,15 +29,15 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
-  static const Color _screenBg = Color(0xFF111111);
-  static const Color _cardBg = Color(0xFF1A1A1C);
-  static const Color _cardBorder = Color(0xFF262628);
-  static const Color _goldColor = Color(0xFFE5A64E);
-  static const Color _textMuted = Color(0xFF8E8E93);
-  static const Color _greenOnline = Color(0xFF00E676);
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  bool _dismissedReminder = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +52,22 @@ class HomeView extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: _screenBg,
+          backgroundColor: AppColors.scaffoldBackground,
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Header: Profile Avatar, Partner Info, Notification & Status Toggle
+                // Top Header: Profile Avatar, Partner Info, Notification Bell & Online Status Toggle
                 _buildHeader(context, state),
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
+
+                // Urgent Alert Banner (d03-dashboard-1.svg)
+                if (!_dismissedReminder) ...[
+                  _buildReminderBanner(context),
+                  const SizedBox(height: 16),
+                ],
 
                 // Top Stats Row: Total Earnings & Deliveries
                 _buildStatsCards(state),
@@ -63,15 +75,176 @@ class HomeView extends StatelessWidget {
 
                 // Today's Breakdown
                 _buildBreakdownCard(state),
+                const SizedBox(height: 18),
+
+                // Active Quests & Surges Banner (Screen #3: IncentiveQuestsScreen)
+                GestureDetector(
+                  onTap: () => context.push(AppRoutes.incentiveQuests),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFFFFBEB), Color(0xFFFEF3C7)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFFFDE68A)),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD97706).withValues(alpha: 0.15),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.military_tech_rounded,
+                            color: Color(0xFFD97706),
+                            size: 22,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Active Quests & Surges',
+                                    style: GoogleFonts.geist(
+                                      color: const Color(0xFF92400E),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFD97706),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      'LIVE',
+                                      style: GoogleFonts.geist(
+                                        color: Colors.white,
+                                        fontSize: 9.5,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Complete 4 more orders to unlock +₹250 bonus',
+                                style: GoogleFonts.geist(
+                                  color: const Color(0xFFB45309),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Color(0xFFD97706),
+                          size: 14,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                // Incoming Order Radar Preview Banner (Screen #1: IncomingOrderModalScreen)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF2F2),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFFECACA)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFDC2626),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.radar_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Incoming Order Dispatch',
+                              style: GoogleFonts.geist(
+                                color: const Color(0xFF991B1B),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              'Simulate live 30s countdown dispatch modal',
+                              style: GoogleFonts.geist(
+                                color: const Color(0xFFB91C1C),
+                                fontSize: 11.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => context.push(AppRoutes.incomingOrder),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFDC2626),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Test Run',
+                          style: GoogleFonts.geist(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 24),
 
                 // Next Delivery Action Section Header
                 Text(
                   'Next Delivery Action',
                   style: GoogleFonts.fraunces(
-                    color: const Color(0xFFFFF1D2),
+                    color: AppColors.textPrimary,
                     fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -93,7 +266,7 @@ class HomeView extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Profile Avatar matching the cropped image (Olive green background, navy/orange polo)
+        // Profile Avatar with fallback
         ClipOval(
           child: Image.asset(
             'assets/images/kabir_avatar.jpg',
@@ -102,11 +275,11 @@ class HomeView extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) => CircleAvatar(
               radius: 24,
-              backgroundColor: const Color(0xFF707C54),
+              backgroundColor: AppColors.surfaceSubtle,
               child: Text(
                 state.partnerName.isNotEmpty ? state.partnerName[0] : 'K',
                 style: GoogleFonts.fraunces(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -116,7 +289,7 @@ class HomeView extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        // Partner Name (Warm Ivory Serif Fraunces) & ID (Clean Sans-serif)
+        // Partner Name & Partner ID
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,27 +298,25 @@ class HomeView extends StatelessWidget {
               Text(
                 state.partnerName,
                 style: GoogleFonts.fraunces(
-                  color: const Color(0xFFFFF1D2),
-                  fontSize: 19,
+                  color: AppColors.textPrimary,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 'Partner ID: ${state.partnerId}',
-                style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.1,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
                 ),
               ),
             ],
           ),
         ),
 
-        // Notification Bell Icon with Red Dot on top-right shoulder
+        // Notification Bell Icon with Red Dot
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
@@ -153,35 +324,36 @@ class HomeView extends StatelessWidget {
                 .read<HomeBloc>()
                 .add(const ToggleNotificationsViewEvent(true));
           },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: SizedBox(
-              width: 28,
-              height: 28,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  const Center(
-                    child: Icon(
-                      Icons.notifications_none_rounded,
-                      color: _goldColor,
-                      size: 26,
+          child: Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Icon(
+                  Icons.notifications_none_rounded,
+                  color: AppColors.textPrimary,
+                  size: 22,
+                ),
+                Positioned(
+                  right: 9,
+                  top: 9,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
                     ),
                   ),
-                  Positioned(
-                    right: 2,
-                    top: 0,
-                    child: Container(
-                      width: 7.5,
-                      height: 7.5,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE54D4D),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -192,36 +364,36 @@ class HomeView extends StatelessWidget {
             context.read<HomeBloc>().add(const ToggleOnlineStatus());
           },
           child: Container(
-            padding: const EdgeInsets.fromLTRB(14, 5, 5, 5),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
-              color: state.isOnline
-                  ? const Color(0xFF0C1E14)
-                  : const Color(0xFF261214),
+              color: state.isOnline ? AppColors.successLight : AppColors.errorLight,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: state.isOnline ? _greenOnline : const Color(0xFFFF5252),
-                width: 1.5,
+                color: state.isOnline
+                    ? AppColors.success.withValues(alpha: 0.3)
+                    : AppColors.error.withValues(alpha: 0.3),
+                width: 1.2,
               ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  state.isOnline ? 'ONLINE' : 'OFFLINE',
-                  style: GoogleFonts.inter(
-                    color: state.isOnline ? _greenOnline : const Color(0xFFFF5252),
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: state.isOnline ? AppColors.successDark : AppColors.error,
+                    shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    color: state.isOnline ? _greenOnline : const Color(0xFFFF5252),
-                    shape: BoxShape.circle,
+                const SizedBox(width: 6),
+                Text(
+                  state.isOnline ? 'ONLINE' : 'OFFLINE',
+                  style: TextStyle(
+                    color: state.isOnline ? AppColors.successText : AppColors.error,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ],
@@ -232,36 +404,94 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  Widget _buildReminderBanner(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFBEB),
+        borderRadius: AppRadius.borderLg,
+        border: Border.all(color: const Color(0xFFFDE68A)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: const BoxDecoration(
+              color: Color(0xFFFEF3C7),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.access_time_filled_rounded,
+              color: Color(0xFFD97706),
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Tiffin Pickup Reminder',
+                  style: GoogleFonts.inter(
+                    color: const Color(0xFF92400E),
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Pickup in 15 minutes!',
+                  style: GoogleFonts.inter(
+                    color: const Color(0xFFB45309),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, size: 18, color: Color(0xFF92400E)),
+            onPressed: () {
+              setState(() {
+                _dismissedReminder = true;
+              });
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildStatsCards(HomeState state) {
     return Row(
       children: [
         // Total Earnings Card
         Expanded(
-          child: Container(
+          child: AppCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: _cardBg,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: _cardBorder, width: 0.8),
-            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Total Earnings',
-                  style: TextStyle(
-                    color: _textMuted,
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w400,
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
                   state.totalEarnings,
                   style: GoogleFonts.fraunces(
-                    color: _goldColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -273,31 +503,26 @@ class HomeView extends StatelessWidget {
 
         // Deliveries Card
         Expanded(
-          child: Container(
+          child: AppCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: _cardBg,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: _cardBorder, width: 0.8),
-            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Deliveries',
-                  style: TextStyle(
-                    color: _textMuted,
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w400,
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
                   '${state.completedDeliveries} / ${state.totalTargetDeliveries}',
                   style: GoogleFonts.fraunces(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -310,25 +535,20 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildBreakdownCard(HomeState state) {
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      decoration: BoxDecoration(
-        color: _cardBg,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: _cardBorder, width: 0.8),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Today's Breakdown",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.5,
+            style: GoogleFonts.fraunces(
+              color: AppColors.textPrimary,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           Row(
             children: [
               // Completed
@@ -338,24 +558,24 @@ class HomeView extends StatelessWidget {
                     Text(
                       '${state.breakdownCompleted}',
                       style: const TextStyle(
-                        color: _greenOnline,
+                        color: AppColors.successDark,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const Text(
+                    const SizedBox(height: 4),
+                    Text(
                       'Completed',
-                      style: TextStyle(
-                        color: _textMuted,
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(height: 32, width: 1, color: _cardBorder),
+              Container(height: 32, width: 1, color: AppColors.border),
 
               // Pending
               Expanded(
@@ -364,24 +584,24 @@ class HomeView extends StatelessWidget {
                     Text(
                       '${state.breakdownPending}',
                       style: const TextStyle(
-                        color: Color(0xFFF5A623),
+                        color: AppColors.warning,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const Text(
+                    const SizedBox(height: 4),
+                    Text(
                       'Pending',
-                      style: TextStyle(
-                        color: _textMuted,
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(height: 32, width: 1, color: _cardBorder),
+              Container(height: 32, width: 1, color: AppColors.border),
 
               // Rejected
               Expanded(
@@ -390,18 +610,18 @@ class HomeView extends StatelessWidget {
                     Text(
                       '${state.breakdownRejected}',
                       style: const TextStyle(
-                        color: Color(0xFFFF5252),
+                        color: AppColors.error,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const Text(
+                    const SizedBox(height: 4),
+                    Text(
                       'Rejected',
-                      style: TextStyle(
-                        color: _textMuted,
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -422,230 +642,191 @@ class HomeView extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF151515),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: _goldColor.withValues(alpha: 0.8),
-          width: 1.2,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Order ID & Badges Row
-          Row(
-            children: [
-              Text(
-                'Order #${action.orderId}',
-                style: const TextStyle(
-                  color: _goldColor,
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const Spacer(),
-
-              // Status Badge (e.g. PICKUP PENDING)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF261214),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: const Color(0xFF7A2428),
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  action.status,
-                  style: const TextStyle(
-                    color: Color(0xFFE54D4D),
-                    fontSize: 10.5,
+      child: AppCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Order ID & Badges Row
+            Row(
+              children: [
+                Text(
+                  'Order #${action.orderId}',
+                  style: GoogleFonts.inter(
+                    color: AppColors.textPrimary,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    letterSpacing: 0.3,
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
+                const Spacer(),
 
-              // Payment Type Badge (COD in gold, PREPAID in green)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: isCod ? _goldColor : _greenOnline,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  action.paymentType,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.2,
+                // Status Badge (e.g. PICKUP PENDING)
+                StatusBadge(text: action.status),
+                const SizedBox(width: 8),
+
+                // Payment Type Badge (COD in amber badge, PREPAID in green badge)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isCod ? AppColors.warningBadgeBg : AppColors.successLight,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    action.paymentType,
+                    style: TextStyle(
+                      color: isCod ? AppColors.warning : AppColors.successText,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.3,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
+              ],
+            ),
+            const SizedBox(height: 16),
 
-          // Pickup Location Row
-          Row(
-            children: [
-              const Icon(
-                Icons.cancel_outlined,
-                color: _textMuted,
-                size: 19,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  action.pickupAddress,
-                  style: const TextStyle(
-                    color: Color(0xFFC7C7CC),
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w400,
+            // Pickup Location Row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 2),
+                  child: Icon(
+                    Icons.radio_button_checked,
+                    color: AppColors.primary,
+                    size: 16,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // Dropoff Location Row
-          Row(
-            children: [
-              const Icon(
-                Icons.location_on_rounded,
-                color: _goldColor,
-                size: 19,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  action.dropAddress,
-                  style: const TextStyle(
-                    color: Color(0xFFE5E5EA),
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w400,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    action.pickupAddress,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textPrimary,
+                      fontSize: 13,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
+              ],
+            ),
+            const SizedBox(height: 10),
 
-          // Action Buttons Row: "View Order" & "Start Navigation"
-          Row(
-            children: [
-              // View Order Button
-              Expanded(
-                child: SizedBox(
-                  height: 48,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      context.read<HomeBloc>().add(
-                        ViewOrderEvent(action.orderId),
-                      );
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => DeliveryDetailsScreen(
-                            orderId: action.orderId,
+            // Dropoff Location Row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 2),
+                  child: Icon(
+                    Icons.location_on_rounded,
+                    color: AppColors.textSecondary,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    action.dropAddress,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Action Buttons Row: "View Order" & "Start Navigation"
+            Row(
+              children: [
+                // View Order Button
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(
+                          ViewOrderEvent(action.orderId),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DeliveryDetailsScreen(
+                              orderId: action.orderId,
+                            ),
                           ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColors.surface,
+                        side: const BorderSide(
+                          color: AppColors.border,
+                          width: 1.2,
                         ),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFF181818),
-                      side: const BorderSide(
-                        color: Color(0xFF2C2C2E),
-                        width: 1.2,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderMd,
+                        ),
+                        padding: EdgeInsets.zero,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: const Text(
-                      'View Order',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                      child: Text(
+                        'View Order',
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
+                const SizedBox(width: 12),
 
-              // Start Navigation Button
-              Expanded(
-                child: SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.read<HomeBloc>().add(
-                        StartNavigationEvent(action.orderId),
-                      );
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ActiveNavigationScreen(
-                            orderId: action.orderId,
+                // Start Navigation Button
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(
+                          StartNavigationEvent(action.orderId),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ActiveNavigationScreen(
+                              orderId: action.orderId,
+                            ),
                           ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderMd,
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        padding: EdgeInsets.zero,
                       ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Ink(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFFF3C06D),
-                            _goldColor,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Start Navigation',
-                          style: TextStyle(
-                            color: Color(0xFF121212),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                          ),
+                      child: Text(
+                        'Start Navigation',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-

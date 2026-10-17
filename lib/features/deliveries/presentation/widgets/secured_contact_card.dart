@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class SecuredContactCard extends StatelessWidget {
   final String maskedPhone;
@@ -14,25 +15,16 @@ class SecuredContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
-      decoration: BoxDecoration(
-        color: const Color(0xFF161615),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF262624),
-          width: 1.0,
-        ),
-      ),
       child: Column(
         children: [
           Text(
             'SECURED CONTACT LINE',
             style: GoogleFonts.inter(
-              color: const Color(0xFF8E8E93),
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+              color: AppColors.primary,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
             ),
           ),
@@ -40,21 +32,21 @@ class SecuredContactCard extends StatelessWidget {
           Text(
             maskedPhone,
             style: GoogleFonts.inter(
-              color: AppColors.creamText,
+              color: AppColors.textPrimary,
               fontSize: 22,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
             proxyNotice,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
-              color: const Color(0xFF7A7A7E),
+              color: AppColors.textSecondary,
               fontSize: 12.5,
               fontWeight: FontWeight.w400,
-              height: 1.35,
+              height: 1.4,
             ),
           ),
         ],

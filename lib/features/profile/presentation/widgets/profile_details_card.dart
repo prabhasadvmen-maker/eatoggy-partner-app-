@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class ProfileDetailsCard extends StatelessWidget {
   final String phoneNumber;
@@ -17,21 +18,28 @@ class ProfileDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF262628),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Column(
         children: [
           _buildDetailRow('Phone Number', phoneNumber),
-          const SizedBox(height: 14),
+          const Divider(height: 24, thickness: 1, color: AppColors.border),
           _buildDetailRow('Vehicle Details', vehicleDetails),
-          const SizedBox(height: 14),
+          const Divider(height: 24, thickness: 1, color: AppColors.border),
           _buildDetailRow('Preferred Zone', preferredZone),
         ],
       ),
@@ -45,9 +53,9 @@ class ProfileDetailsCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(
-            color: const Color(0xFF8E8E93),
-            fontSize: 13,
+          style: GoogleFonts.geist(
+            color: AppColors.textSecondary,
+            fontSize: 13.5,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -63,10 +71,10 @@ class ProfileDetailsCard extends StatelessWidget {
                 maxLines: 1,
                 softWrap: false,
                 textAlign: TextAlign.right,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.geist(
+                  color: AppColors.textPrimary,
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

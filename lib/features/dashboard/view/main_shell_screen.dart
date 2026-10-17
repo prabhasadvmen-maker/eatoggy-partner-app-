@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../bloc/navigation_bloc.dart';
 import '../../home/presentation/pages/home_screen.dart';
 import '../../deliveries/presentation/pages/deliveries_screen.dart';
@@ -28,10 +29,9 @@ class MainShellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    const goldColor = Color(0xFFE5A64E);
-    const unselectedColor = Color(0xFF8E8E93);
-    const navBgColor = Color(0xFF0E0E10);
+    const activeColor = AppColors.primary;
+    const unselectedColor = AppColors.textSecondary;
+    const navBgColor = AppColors.surface;
 
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
@@ -45,7 +45,7 @@ class MainShellView extends StatelessWidget {
         ];
 
         return Scaffold(
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.scaffoldBackground,
           body: SafeArea(
             child: IndexedStack(
               index: currentIndex,
@@ -53,20 +53,20 @@ class MainShellView extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: Container(
-            color: navBgColor,
+            decoration: const BoxDecoration(
+              color: navBgColor,
+              border: Border(
+                top: BorderSide(
+                  color: AppColors.border,
+                  width: 1.0,
+                ),
+              ),
+            ),
             child: SafeArea(
               top: false,
               child: Container(
-                height: 62,
-                decoration: const BoxDecoration(
-                  color: navBgColor,
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xFF202022),
-                      width: 0.8,
-                    ),
-                  ),
-                ),
+                height: 64,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -75,9 +75,9 @@ class MainShellView extends StatelessWidget {
                       index: 0,
                       currentIndex: currentIndex,
                       label: 'Dashboard',
-                      icon: Icons.grid_view_rounded,
+                      icon: Icons.grid_view_outlined,
                       activeIcon: Icons.grid_view_rounded,
-                      goldColor: goldColor,
+                      activeColor: activeColor,
                       unselectedColor: unselectedColor,
                     ),
                     _buildNavItem(
@@ -87,7 +87,7 @@ class MainShellView extends StatelessWidget {
                       label: 'Deliveries',
                       icon: Icons.local_shipping_outlined,
                       activeIcon: Icons.local_shipping_rounded,
-                      goldColor: goldColor,
+                      activeColor: activeColor,
                       unselectedColor: unselectedColor,
                     ),
                     _buildNavItem(
@@ -97,7 +97,7 @@ class MainShellView extends StatelessWidget {
                       label: 'Earnings',
                       icon: Icons.trending_up_rounded,
                       activeIcon: Icons.trending_up_rounded,
-                      goldColor: goldColor,
+                      activeColor: activeColor,
                       unselectedColor: unselectedColor,
                     ),
                     _buildNavItem(
@@ -107,7 +107,7 @@ class MainShellView extends StatelessWidget {
                       label: 'Profile',
                       icon: Icons.person_outline_rounded,
                       activeIcon: Icons.person_rounded,
-                      goldColor: goldColor,
+                      activeColor: activeColor,
                       unselectedColor: unselectedColor,
                     ),
                   ],
@@ -127,37 +127,37 @@ class MainShellView extends StatelessWidget {
     required String label,
     required IconData icon,
     required IconData activeIcon,
-    required Color goldColor,
+    required Color activeColor,
     required Color unselectedColor,
   }) {
     final isSelected = currentIndex == index;
-    final color = isSelected ? goldColor : unselectedColor;
+    final color = isSelected ? activeColor : unselectedColor;
 
-    return InkWell(
-      onTap: () => context.read<NavigationBloc>().add(TabChanged(index)),
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            isSelected ? activeIcon : icon,
-            color: color,
-            size: 24,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
+    return Expanded(
+      child: InkWell(
+        onTap: () => context.read<NavigationBloc>().add(TabChanged(index)),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              isSelected ? activeIcon : icon,
               color: color,
-              fontSize: 11.5,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              size: 22,
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: AppTextStyles.caption.copyWith(
+                color: color,
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

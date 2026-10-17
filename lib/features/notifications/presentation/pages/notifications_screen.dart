@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../bloc/notifications_bloc.dart';
 import '../../bloc/notifications_event.dart';
 import '../../bloc/notifications_state.dart';
@@ -40,7 +40,7 @@ class NotificationsView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: AppColors.scaffoldBackground,
         body: SafeArea(
           child: BlocBuilder<NotificationsBloc, NotificationsState>(
             builder: (context, state) {
@@ -49,29 +49,35 @@ class NotificationsView extends StatelessWidget {
                 children: [
                   // Top Header: Back Arrow + Title + "Mark all as read"
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (onBack != null) ...[
+                        if (onBack != null || Navigator.canPop(context)) ...[
                           GestureDetector(
-                            onTap: onBack,
+                            onTap: () {
+                              if (onBack != null) {
+                                onBack!();
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
                             behavior: HitTestBehavior.opaque,
                             child: Container(
                               width: 38,
                               height: 38,
                               margin: const EdgeInsets.only(right: 12),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1B1B1D),
+                                color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xFF2C2C2E),
-                                  width: 0.8,
+                                  color: AppColors.border,
+                                  width: 1,
                                 ),
                               ),
                               child: const Icon(
                                 Icons.arrow_back_ios_new_rounded,
-                                color: AppColors.creamText,
+                                color: AppColors.textPrimary,
                                 size: 16,
                               ),
                             ),
@@ -80,10 +86,10 @@ class NotificationsView extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Notifications',
-                            style: AppTextStyles.displayLarge.copyWith(
-                              color: AppColors.creamText,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.fraunces(
+                              color: AppColors.textPrimary,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -96,12 +102,12 @@ class NotificationsView extends StatelessWidget {
                           },
                           child: Text(
                             'Mark all as read',
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.cardGoldAccent,
+                            style: GoogleFonts.geist(
+                              color: AppColors.primary,
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                               decoration: TextDecoration.underline,
-                              decorationColor: AppColors.cardGoldAccent,
+                              decorationColor: AppColors.primary,
                             ),
                           ),
                         ),
@@ -113,7 +119,7 @@ class NotificationsView extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: state.notifications.length,
                       itemBuilder: (context, index) {
                         final notification = state.notifications[index];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../data/models/earnings_model.dart';
 
 class EarningsBreakdownCard extends StatelessWidget {
@@ -21,12 +22,13 @@ class EarningsBreakdownCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFF171719),
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
-            color: const Color(0xFF262628),
-            width: 0.8,
+            color: AppColors.border,
+            width: 1.0,
           ),
+          boxShadow: AppShadows.card,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,8 +39,8 @@ class EarningsBreakdownCard extends StatelessWidget {
               children: [
                 Text(
                   breakdown.dateTitle,
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.textPrimaryDark,
+                  style: GoogleFonts.inter(
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
@@ -46,8 +48,8 @@ class EarningsBreakdownCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   breakdown.deliveriesCountText,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textMutedDark,
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                   ),
@@ -55,13 +57,13 @@ class EarningsBreakdownCard extends StatelessWidget {
               ],
             ),
 
-            // Right: Amount in Gold
+            // Right: Amount in Fraunces
             Text(
               breakdown.amount,
-              style: AppTextStyles.titleMedium.copyWith(
-                color: AppColors.cardGoldAccent,
+              style: GoogleFonts.fraunces(
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
-                fontSize: 16,
+                fontSize: 17,
               ),
             ),
           ],

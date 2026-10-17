@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class WithdrawMoneyCard extends StatelessWidget {
   final String availableBalance;
@@ -20,36 +22,28 @@ class WithdrawMoneyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF171719),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.cardGoldAccent.withValues(alpha: 0.55),
-          width: 1.0,
-        ),
-      ),
+    return AppCard(
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Available Balance Label
           Text(
             'AVAILABLE BALANCE',
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.cardGoldAccent,
+            style: GoogleFonts.inter(
+              color: AppColors.primary,
               fontWeight: FontWeight.w700,
               fontSize: 11.5,
               letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
 
-          // Big Balance Amount (Serif Fraunces in Gold)
+          // Big Balance Amount
           Text(
             availableBalance,
-            style: AppTextStyles.displayLarge.copyWith(
-              color: AppColors.cardGoldAccent,
+            style: GoogleFonts.fraunces(
+              color: AppColors.textPrimary,
               fontSize: 32,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -60,32 +54,31 @@ class WithdrawMoneyCard extends StatelessWidget {
           // Settlement Note
           Text(
             settlementNote,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textMutedDark,
+            style: GoogleFonts.inter(
+              color: AppColors.textSecondary,
               fontSize: 12.5,
               fontWeight: FontWeight.w400,
             ),
           ),
           const SizedBox(height: 18),
 
-          // Withdraw Button
+          // Withdraw Button (Gourmet Crimson Button)
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 50,
             child: ElevatedButton(
               onPressed: onWithdraw,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.cardGoldAccent,
-                foregroundColor: const Color(0xFF11110F),
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
                 elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: AppRadius.borderLg,
                 ),
               ),
               child: Text(
                 'Withdraw to Bank Account',
-                style: AppTextStyles.button.copyWith(
-                  color: const Color(0xFF11110F),
+                style: GoogleFonts.inter(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
@@ -100,8 +93,8 @@ class WithdrawMoneyCard extends StatelessWidget {
             children: [
               Text(
                 bankInfo,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textMutedDark,
+                style: GoogleFonts.inter(
+                  color: AppColors.textSecondary,
                   fontSize: 13,
                 ),
               ),
@@ -113,11 +106,11 @@ class WithdrawMoneyCard extends StatelessWidget {
                     vertical: 5,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF222225),
+                    color: AppColors.surfaceSubtle,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: const Color(0xFF353538),
-                      width: 0.8,
+                      color: AppColors.border,
+                      width: 1.0,
                     ),
                   ),
                   child: Row(
@@ -125,14 +118,14 @@ class WithdrawMoneyCard extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.edit_outlined,
-                        color: AppColors.creamText,
+                        color: AppColors.textPrimary,
                         size: 13.5,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         'Change',
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.creamText,
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),

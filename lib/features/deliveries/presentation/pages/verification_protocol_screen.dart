@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/verification_protocol/verification_protocol_bloc.dart';
 import '../../bloc/verification_protocol/verification_protocol_event.dart';
 import '../../bloc/verification_protocol/verification_protocol_state.dart';
 import '../widgets/otp_digit_box.dart';
 import 'report_delivery_issue_screen.dart';
-import 'delivery_completion_screen.dart';
+import 'cod_payment_screen.dart';
 
 class VerificationProtocolScreen extends StatelessWidget {
   final String orderId;
@@ -46,7 +48,6 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
     _otpController = TextEditingController();
     _focusNode = FocusNode();
 
-    // Trigger initial event so BLoC is in sync with initial value
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context
@@ -70,38 +71,42 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VerificationProtocolBloc, VerificationProtocolState>(
       listener: (context, state) {
         if (state.status == VerificationStatus.success) {
+          // If COD payment, navigate to CodPaymentScreen, else DeliveryCompletionScreen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => DeliveryCompletionScreen(
+              builder: (_) => CodPaymentScreen(
                 orderId: state.protocol.orderId,
+                totalAmount: 847.00,
               ),
             ),
           );
         } else if (state.issueReported != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: const Color(0xFF2A1C1C),
+              backgroundColor: AppColors.surface,
               content: Row(
                 children: [
-                  const Icon(Icons.info_outline, color: AppColors.cardGoldAccent, size: 20),
+                  const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       'Issue report received: "${state.issueReported}". Fleet support notified.',
-                      style: GoogleFonts.inter(color: AppColors.creamText, fontSize: 13),
+                      style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 13),
                     ),
                   ),
                 ],
               ),
               behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: AppRadius.borderMd,
+                side: const BorderSide(color: AppColors.border),
+              ),
             ),
           );
         }
@@ -110,11 +115,11 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
         final entered = state.enteredOtp;
 
         return Scaffold(
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.scaffoldBackground,
           body: SafeArea(
             child: Stack(
               children: [
-                // Off-screen hidden textfield that captures soft keyboard input
+                // Hidden textfield capturing soft keyboard
                 Opacity(
                   opacity: 0.0,
                   child: SizedBox(
@@ -154,16 +159,17 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1E1E1C),
+                            color: AppColors.surface,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF2E2E2A),
+                              color: AppColors.border,
                               width: 1.0,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           child: const Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: AppColors.creamText,
+                            color: AppColors.textPrimary,
                             size: 16,
                           ),
                         ),
@@ -174,27 +180,25 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
                       Text(
                         state.protocol.title,
                         style: GoogleFonts.fraunces(
-                          color: AppColors.creamText,
-                          fontSize: 30,
+                          color: AppColors.textPrimary,
+                          fontSize: 28,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.5,
                         ),
                       ),
                       const SizedBox(height: 8),
 
-                      // Subtitle: "Enter the secure code shared by the customer"
+                      // Subtitle
                       Text(
                         state.protocol.subtitle,
-                        style: GoogleFonts.inter(
-                          color: AppColors.textSecondaryDark,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          height: 1.35,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 14.5,
                         ),
                       ),
                       const SizedBox(height: 36),
 
-                      // 4 Large OTP Digit Boxes Row (matching screenshot)
+                      // 4 Large OTP Digit Boxes Row matching d10-delivery-otp.svg
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.generate(4, (index) {
@@ -231,74 +235,59 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
 
                       const SizedBox(height: 24),
 
-                      // Helper text: "OTP was sent to customer's registered smartphone app."
+                      // Helper text
                       Center(
                         child: Text(
                           state.protocol.infoText,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            color: AppColors.textMutedDark,
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textSecondary,
                             fontSize: 13,
-                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
                       const SizedBox(height: 48),
 
-                      // CTA Button: "Verify & Complete Delivery" (Gold Button)
-                      InkWell(
-                        onTap: state.status == VerificationStatus.verifying
-                            ? null
-                            : () {
-                                context
-                                    .read<VerificationProtocolBloc>()
-                                    .add(const SubmitVerificationEvent());
-                              },
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: double.infinity,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFFE8B669),
-                                Color(0xFFD69C45),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+                      // CTA Button: "Verify & Complete Delivery" (Crimson Button)
+                      SizedBox(
+                        width: double.infinity,
+                        height: 54,
+                        child: ElevatedButton(
+                          onPressed: state.status == VerificationStatus.verifying
+                              ? null
+                              : () {
+                                  context
+                                      .read<VerificationProtocolBloc>()
+                                      .add(const SubmitVerificationEvent());
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: AppRadius.borderLg,
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFD69C45).withValues(alpha: 0.3),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
                           ),
-                          child: Center(
-                            child: state.status == VerificationStatus.verifying
-                                ? const SizedBox(
-                                    width: 22,
-                                    height: 22,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Color(0xFF11110F),
-                                    ),
-                                  )
-                                : Text(
-                                    'Verify & Complete Delivery',
-                                    style: GoogleFonts.inter(
-                                      color: const Color(0xFF11110F),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.1,
-                                    ),
+                          child: state.status == VerificationStatus.verifying
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: Colors.white,
                                   ),
-                          ),
+                                )
+                              : Text(
+                                  'Verify & Complete Delivery',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15.5,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.1,
+                                  ),
+                                ),
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 16),
 
                       // Red link: "Report Issue"
                       Center(
@@ -318,24 +307,17 @@ class _VerificationProtocolViewState extends State<VerificationProtocolView> {
                                   .add(ReportDeliveryIssueEvent(reason));
                             }
                           },
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.error,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                          ),
                           child: Text(
                             'Report Issue',
                             style: GoogleFonts.inter(
                               color: AppColors.error,
-                              fontSize: 14.5,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                     ],
                   ),
                 ),

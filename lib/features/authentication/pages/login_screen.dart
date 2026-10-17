@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../bloc/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -60,10 +61,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    // const inputBgColor = AppColors.darkSurface;
-    const borderColor = AppColors.darkBorder;
+    const bgColor = AppColors.background;
+    const borderColor = AppColors.border;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -78,35 +77,33 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 2.h),
+                SizedBox(height: 3.h),
 
                 // Title & Subtitle using AppTextStyles
                 Text(
                   'Partner Entrance',
                   style: AppTextStyles.displayLarge,
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 1.2.h),
                 Text(
                   'Access the delivery suite and manage your schedules',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
-                  ),
+                  style: AppTextStyles.bodyMedium,
                 ),
 
-                SizedBox(height: 4.h),
+                SizedBox(height: 5.h),
 
                 // ENTER MOBILE NUMBER Label
                 Text(
                   'ENTER MOBILE NUMBER',
                   style: AppTextStyles.label,
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 1.2.h),
 
-                // Phone Input Field (Matches Image)
+                // Phone Input Field
                 BlocBuilder<LoginBloc, LoginState>(
                   buildWhen: (p, c) => p.phoneError != c.phoneError,
                   builder: (context, state) {
@@ -116,11 +113,13 @@ class _LoginViewState extends State<LoginView> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            // color: inputBgColor,
-                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.surface,
+                            borderRadius: AppRadius.borderLg,
                             border: Border.all(
                               color: hasError ? AppColors.error : borderColor,
+                              width: 1.2,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           child: Row(
                             children: [
@@ -129,11 +128,10 @@ class _LoginViewState extends State<LoginView> {
                                 child: Row(
                                   children: [
                                     const Text('🇮🇳', style: TextStyle(fontSize: 18)),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: 8),
                                     Text(
                                       '+91',
                                       style: AppTextStyles.bodyLarge.copyWith(
-                                        color: Colors.white,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -155,10 +153,14 @@ class _LoginViewState extends State<LoginView> {
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   onChanged: (val) => context.read<LoginBloc>().add(LoginPhoneChanged(val)),
-                                  style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                                  style: AppTextStyles.bodyLarge.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   decoration: InputDecoration(
                                     hintText: '98765 43210',
-                                    hintStyle: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+                                    hintStyle: AppTextStyles.bodyLarge.copyWith(
+                                      color: AppColors.textPlaceholder,
+                                    ),
                                     fillColor: Colors.transparent,
                                     filled: false,
                                     border: InputBorder.none,
@@ -175,7 +177,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         ),
                         if (hasError) ...[
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Text(
                             state.phoneError!,
                             style: AppTextStyles.caption.copyWith(
@@ -191,48 +193,39 @@ class _LoginViewState extends State<LoginView> {
 
                 SizedBox(height: 4.h),
 
-                // Request OTP Button (Gold Gradient Button matching Image)
+                // Request OTP Button (Crimson Button matching d02-login-otp.svg)
                 BlocBuilder<LoginBloc, LoginState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              context.read<LoginBloc>().add(const LoginSubmitted());
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.buttonHeight,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                context.read<LoginBloc>().add(const LoginSubmitted());
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.textLight,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Request OTP',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Request OTP',
+                                style: AppTextStyles.button,
+                              ),
                       ),
                     );
                   },

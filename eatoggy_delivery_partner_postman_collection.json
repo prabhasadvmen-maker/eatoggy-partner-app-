@@ -1,0 +1,869 @@
+{
+	"info": {
+		"_postman_id": "c1f7b8e2-9d3a-4a25-b883-eatoggy-delivery-partner",
+		"name": "Eatoggy - Delivery Partner API",
+		"description": "Comprehensive Postman Collection for Eatoggy Delivery Partner App. Covers Auth & Onboarding, Real-Time Delivery Operations, Live Location Updates, OTP Verification, Earnings & Settlements, Support & Analytics.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.eatoggy.in",
+			"type": "string"
+		},
+		{
+			"key": "deliveryPartnerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "deliveryId",
+			"value": "6ab26e45389aa9a7c2571197",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth & Onboarding",
+			"description": "Authentication, OTP Verification, and Multi-Step Delivery Partner Onboarding APIs.",
+			"item": [
+				{
+					"name": "1. Delivery Partner Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mobile\": \"8601140605\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery-auth/send-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery-auth",
+								"send-otp"
+							]
+						},
+						"description": "Send 6-digit OTP to Delivery Partner mobile number.\nAuth: Public\nBody: mobile"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Delivery Partner Verify OTP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 or 201\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									"try {",
+									"    var jsonData = pm.response.json();",
+									"    var token = jsonData.token || (jsonData.data && jsonData.data.token) || jsonData.jwt || (jsonData.data && jsonData.data.jwt);",
+									"    if (token) {",
+									"        pm.collectionVariables.set(\"deliveryPartnerToken\", token);",
+									"        console.log(\"Saved deliveryPartnerToken to collection variables:\", token);",
+									"    }",
+									"} catch (e) {",
+									"    console.error(\"Error parsing response token:\", e);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mobile\": \"8601140605\",\n  \"otp\": \"217647\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery-auth/verify-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery-auth",
+								"verify-otp"
+							]
+						},
+						"description": "Verify OTP for Delivery Partner. Auto-creates account if new mobile or authenticates existing partner. Returns Delivery Partner JWT and currentStep.\nAuth: Public\nBody: mobile, otp\n\n*Note: Automatically stores the returned token into {{deliveryPartnerToken}} collection variable!*"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Delivery Partner Me Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery-auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery-auth",
+								"me"
+							]
+						},
+						"description": "Get authenticated Delivery Partner profile and onboarding status.\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Save Profile (No Password)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Test Partner\",\n  \"email\": \"partner@example.com\",\n  \"city\": \"Mumbai\",\n  \"zone\": \"Andheri\",\n  \"vehicleType\": \"Bike\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"profile"
+							]
+						},
+						"description": "Save Delivery Partner profile details (no password).\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Save Operational Location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"selectedAddress\": \"Andheri West Hub, Mumbai\",\n  \"latitude\": 19.1197,\n  \"longitude\": 72.8464\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/location",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"location"
+							]
+						},
+						"description": "Save operational location coordinates and address.\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Save Payout Bank Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"accountHolderName\": \"Test Partner\",\n  \"accountNumber\": \"918273645019\",\n  \"ifscCode\": \"SBIN0001234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/bank",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"bank"
+							]
+						},
+						"description": "Save payout bank account details.\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "7. Get Active Onboarding Fee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/fee",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"fee"
+							]
+						},
+						"description": "Get current active onboarding fee setting.\nAuth: Public"
+					},
+					"response": []
+				},
+				{
+					"name": "8. Create Razorpay Payment Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/create-payment-order",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"create-payment-order"
+							]
+						},
+						"description": "Create Razorpay order for onboarding fee payment.\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "9. Submit Onboarding Application",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/submit",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"submit"
+							]
+						},
+						"description": "Submit completed onboarding application for SuperAdmin review.\nAuth: Bearer {{deliveryPartnerToken}}"
+					},
+					"response": []
+				},
+				{
+					"name": "10. Create Driver Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mobile\": \"5875755775\",\n  \"fullName\": \"Rahul Kumar\",\n  \"cityandzone\": \"Delhi(North Delhi)\",\n  \"vehicleType\": \"Bike\",\n  \"email\": \"rahul@gmail.com\",\n  \"selectedAddress\": \"Rohini Sector 10, Delhi\",\n  \"latitude\": 28.7041,\n  \"longitude\": 77.1025\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/onboarding/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"onboarding",
+								"profile"
+							]
+						},
+						"description": "Direct Driver onboarding creation endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "11. Get All Cities",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cities",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cities"
+							]
+						},
+						"description": "Fetch list of active operational cities."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delivery Operations",
+			"description": "Live delivery radar, accepting jobs, status updates, live GPS tracking, and customer OTP delivery completion.",
+			"item": [
+				{
+					"name": "Toggle Availability (Online/Offline)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isOnline\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/availability",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"availability"
+							]
+						},
+						"description": "Toggle Rider online/offline status.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Available Jobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/available-jobs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"available-jobs"
+							]
+						},
+						"description": "Get available unassigned delivery jobs (READY status orders).\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/jobs/:deliveryId/accept",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"jobs",
+								":deliveryId",
+								"accept"
+							],
+							"variable": [
+								{
+									"key": "deliveryId",
+									"value": "{{deliveryId}}",
+									"description": "Target delivery ID to claim"
+								}
+							]
+						},
+						"description": "Atomically accept/claim an available delivery assignment.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Job Status (PICKED_UP / OUT_FOR_DELIVERY)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PICKED_UP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/jobs/:deliveryId/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"jobs",
+								":deliveryId",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "deliveryId",
+									"value": "{{deliveryId}}",
+									"description": "Delivery ID to update"
+								}
+							]
+						},
+						"description": "Update delivery status (e.g. PICKED_UP or OUT_FOR_DELIVERY).\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Delivery OTP & Complete Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"otp\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/jobs/:deliveryId/verify-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"jobs",
+								":deliveryId",
+								"verify-otp"
+							],
+							"variable": [
+								{
+									"key": "deliveryId",
+									"value": "{{deliveryId}}",
+									"description": "Delivery ID being completed"
+								}
+							]
+						},
+						"description": "Submit customer 4-digit OTP to verify delivery and complete order.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Live Location (GPS Telemetry)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": 28.6251,\n  \"longitude\": 77.2185\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/jobs/:deliveryId/location",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"jobs",
+								":deliveryId",
+								"location"
+							],
+							"variable": [
+								{
+									"key": "deliveryId",
+									"value": "{{deliveryId}}",
+									"description": "Active Delivery ID"
+								}
+							]
+						},
+						"description": "Update rider's live GPS coordinates (-90<=lat<=90, -180<=lng<=180). Emits real-time socket event.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Earnings & Settlements",
+			"description": "Daily earnings summary, COD deductions, bonuses, and settlement history.",
+			"item": [
+				{
+					"name": "Delivery Partner: Get My Earnings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/earnings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"earnings"
+							]
+						},
+						"description": "Fetch earnings summary and settlement statements for authenticated delivery partner.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Support & Analytics",
+			"description": "Fleet support tickets, performance KPI overview, and operational analytics.",
+			"item": [
+				{
+					"name": "Delivery Partner: Get My Support Tickets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/support/tickets/delivery/my",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"delivery",
+								"my"
+							]
+						},
+						"description": "Fetch support tickets submitted by authenticated delivery rider.\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Delivery Partner Analytics Overview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{deliveryPartnerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/delivery/analytics/overview",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delivery",
+								"analytics",
+								"overview"
+							]
+						},
+						"description": "Fetch delivery partner specific analytics (IDOR protected).\nAuth: Delivery Partner Bearer JWT"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Super Admin & Promotions",
+			"description": "Coupons and super-admin promo endpoints.",
+			"item": [
+				{
+					"name": "Get Coupons",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6eyJpZCI6IjZhYjIzYjRmNzRhNjlmMmFjZDY1MWJmOSIsInJvbGUiOiJTdXBlckFkbWluIn0sImlhdCI6MTc5MDY3ODE1OCwiZXhwIjoxNzkwNzY0NTU4fQ.KyiKFP4DSikCdhhEthwdDa-w408g93MMaOI-NBawiGo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.eatoggy.in/api/super-admin/coupons",
+							"protocol": "https",
+							"host": [
+								"api",
+								"eatoggy",
+								"in"
+							],
+							"path": [
+								"api",
+								"super-admin",
+								"coupons"
+							]
+						},
+						"description": "Get coupon list with SuperAdmin credentials."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

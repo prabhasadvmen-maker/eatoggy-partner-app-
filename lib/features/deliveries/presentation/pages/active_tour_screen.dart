@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/active_tour/active_tour_bloc.dart';
 import '../../bloc/active_tour/active_tour_event.dart';
 import '../../bloc/active_tour/active_tour_state.dart';
@@ -31,18 +33,15 @@ class ActiveTourScreen extends StatelessWidget {
 class ActiveTourView extends StatelessWidget {
   const ActiveTourView({super.key});
 
-  static const Color _screenBg = Color(0xFF111111);
-  static const Color _goldColor = AppColors.cardGoldAccent;
-
   void _showCompletionDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A1C),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: Color(0xFF262628)),
+        backgroundColor: AppColors.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppRadius.borderLg,
+          side: BorderSide(color: AppColors.border),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -51,12 +50,12 @@ class ActiveTourView extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: const BoxDecoration(
-                color: Color(0xFF0F2C1A),
+                color: AppColors.successLight,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.check_circle_rounded,
-                color: Color(0xFF00E676),
+                color: AppColors.successText,
                 size: 36,
               ),
             ),
@@ -64,7 +63,7 @@ class ActiveTourView extends StatelessWidget {
             Text(
               'Delivery Completed!',
               style: GoogleFonts.fraunces(
-                color: AppColors.creamText,
+                color: AppColors.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),
@@ -74,28 +73,33 @@ class ActiveTourView extends StatelessWidget {
               'Order #EG-7840 has been handed over and confirmed.',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                color: const Color(0xFF8E8E93),
+                color: AppColors.textSecondary,
                 fontSize: 14,
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _goldColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: AppRadius.borderLg,
+                  ),
                 ),
-                minimumSize: const Size(double.infinity, 48),
-              ),
-              onPressed: () {
-                Navigator.pop(dialogContext); // close dialog
-                Navigator.of(context).popUntil((route) => route.isFirst); // back to home
-              },
-              child: Text(
-                'Back to Dashboard',
-                style: GoogleFonts.inter(
-                  color: const Color(0xFF141416),
-                  fontWeight: FontWeight.w700,
+                onPressed: () {
+                  Navigator.pop(dialogContext); // close dialog
+                  Navigator.of(context).popUntil((route) => route.isFirst); // back to home
+                },
+                child: Text(
+                  'Back to Dashboard',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.5,
+                  ),
                 ),
               ),
             ),
@@ -110,7 +114,7 @@ class ActiveTourView extends StatelessWidget {
     return PopScope(
       canPop: true,
       child: Scaffold(
-        backgroundColor: _screenBg,
+        backgroundColor: AppColors.scaffoldBackground,
         body: BlocConsumer<ActiveTourBloc, ActiveTourState>(
           listener: (context, state) {
             if (state.status == ActiveTourStatus.otpVerified) {
@@ -133,41 +137,38 @@ class ActiveTourView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Back arrow & Header
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1A1A1C),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color(0xFF262628),
-                                width: 1,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.arrow_back_rounded,
-                                color: _goldColor,
-                                size: 20,
-                              ),
-                            ),
+                    // Back arrow
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.border,
+                            width: 1,
+                          ),
+                          boxShadow: AppShadows.card,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: AppColors.textPrimary,
+                            size: 16,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                     const SizedBox(height: 14),
 
-                    // Title: Active Delivery Tour (Fraunces Warm Cream Serif)
+                    // Title: Active Delivery Tour
                     Text(
                       tour.title,
                       style: GoogleFonts.fraunces(
-                        color: AppColors.creamText,
-                        fontSize: 25,
+                        color: AppColors.textPrimary,
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
                       ),
@@ -177,13 +178,12 @@ class ActiveTourView extends StatelessWidget {
                     // Subtitle: Out for Delivery • Order #EG-7840
                     Text(
                       tour.statusText,
-                      style: GoogleFonts.inter(
-                        color: const Color(0xFF8E8E93),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
                         fontSize: 13.5,
-                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
 
                     // Estimated Time Card
                     TourEstimatedTimeCard(
@@ -192,7 +192,7 @@ class ActiveTourView extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
                     // Delivery For Card
                     TourDeliveryForCard(
@@ -203,94 +203,79 @@ class ActiveTourView extends StatelessWidget {
 
                     const Spacer(),
 
-                    // Button 1: Enter Delivery OTP (Gold CTA)
-                    InkWell(
-                      onTap: tour.isDelivered
-                          ? null
-                          : () async {
-                              final result = await Navigator.push<bool>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => VerificationProtocolScreen(
-                                    orderId: tour.orderId,
+                    // Button 1: Enter Delivery OTP (Crimson CTA)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton(
+                        onPressed: tour.isDelivered
+                            ? null
+                            : () async {
+                                final result = await Navigator.push<bool>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => VerificationProtocolScreen(
+                                      orderId: tour.orderId,
+                                    ),
                                   ),
-                                ),
-                              );
-                              if (result == true && context.mounted) {
-                                context
-                                    .read<ActiveTourBloc>()
-                                    .add(VerifyOtpEvent(tour.correctOtp));
-                              }
-                            },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        width: double.infinity,
-                        height: 54,
-                        decoration: BoxDecoration(
-                          color: tour.isDelivered
-                              ? const Color(0xFF00E676)
-                              : _goldColor,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: (tour.isDelivered
-                                      ? const Color(0xFF00E676)
-                                      : _goldColor)
-                                  .withValues(alpha: 0.25),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                                );
+                                if (result == true && context.mounted) {
+                                  context
+                                      .read<ActiveTourBloc>()
+                                      .add(VerifyOtpEvent(tour.correctOtp));
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: tour.isDelivered
+                              ? AppColors.success
+                              : AppColors.primary,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
+                          ),
                         ),
-                        child: Center(
-                          child: Text(
-                            tour.isDelivered
-                                ? 'Delivery Completed ✓'
-                                : 'Enter Delivery OTP',
-                            style: GoogleFonts.inter(
-                              color: const Color(0xFF141416),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.1,
-                            ),
+                        child: Text(
+                          tour.isDelivered
+                              ? 'Delivery Completed ✓'
+                              : 'Enter Delivery OTP',
+                          style: GoogleFonts.inter(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.1,
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 12),
 
-                    // Button 2: Initiate Customer Call (Dark outlined secondary button)
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => CustomerCallScreen(
-                              orderId: tour.orderId,
+                    // Button 2: Initiate Customer Call (Outlined Button)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CustomerCallScreen(
+                                orderId: tour.orderId,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        width: double.infinity,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF18181A),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: const Color(0xFF2E2E32),
-                            width: 1.2,
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.textPrimary,
+                          side: const BorderSide(color: AppColors.border),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
                         ),
-                        child: Center(
-                          child: Text(
-                            'Initiate Customer Call',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        child: Text(
+                          'Initiate Customer Call',
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

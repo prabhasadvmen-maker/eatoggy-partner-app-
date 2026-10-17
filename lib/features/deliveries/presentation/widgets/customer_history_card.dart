@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class CustomerHistoryCard extends StatelessWidget {
   final int totalOrdersPlaced;
@@ -14,30 +15,21 @@ class CustomerHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF161615),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF262624),
-          width: 1.0,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'CUSTOMER HISTORY',
             style: GoogleFonts.inter(
-              color: AppColors.cardGoldAccent,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+              color: AppColors.primary,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
           // Total Orders Placed
           Row(
@@ -46,22 +38,22 @@ class CustomerHistoryCard extends StatelessWidget {
               Text(
                 'Total Orders Placed',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
-                  fontSize: 14.5,
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               Text(
                 '$totalOrdersPlaced',
                 style: GoogleFonts.inter(
-                  color: AppColors.cardGoldAccent,
-                  fontSize: 18,
+                  color: AppColors.textPrimary,
+                  fontSize: 17,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
 
           // Member Since
           Row(
@@ -70,17 +62,17 @@ class CustomerHistoryCard extends StatelessWidget {
               Text(
                 'Member Since',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
-                  fontSize: 14.5,
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               Text(
                 memberSince,
                 style: GoogleFonts.inter(
-                  color: const Color(0xFFE2E2E6),
-                  fontSize: 14.5,
-                  fontWeight: FontWeight.w500,
+                  color: AppColors.textPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],

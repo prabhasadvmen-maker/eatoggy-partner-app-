@@ -14,61 +14,69 @@ class DirectLinesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF262628),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Direct Lines',
-            style: GoogleFonts.inter(
-              color: Colors.white,
+            style: GoogleFonts.fraunces(
+              color: AppColors.textPrimary,
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 14),
           Row(
             children: [
-              // Call Support Action Button
+              // Call Support Action Button (Primary Crimson)
               Expanded(
                 child: InkWell(
                   onTap: onCallSupport,
                   borderRadius: BorderRadius.circular(14),
                   child: Container(
-                    height: 52,
+                    height: 50,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF141416),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: const Color(0xFF2E2E32),
-                        width: 1,
-                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.25),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(
-                          Icons.call_outlined,
-                          color: goldColor,
-                          size: 20,
+                          Icons.call_rounded,
+                          color: Colors.white,
+                          size: 18,
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Call Support',
-                          style: GoogleFonts.inter(
+                          'Call Fleet',
+                          style: GoogleFonts.geist(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -81,19 +89,19 @@ class DirectLinesCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
 
-              // Chat Support Action Button
+              // Chat Support Action Button (Light stone outline)
               Expanded(
                 child: InkWell(
                   onTap: onChatSupport,
                   borderRadius: BorderRadius.circular(14),
                   child: Container(
-                    height: 52,
+                    height: 50,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF141416),
+                      color: const Color(0xFFFAF7F2),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: const Color(0xFF2E2E32),
+                        color: AppColors.border,
                         width: 1,
                       ),
                     ),
@@ -102,14 +110,14 @@ class DirectLinesCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.chat_bubble_outline_rounded,
-                          color: goldColor,
-                          size: 20,
+                          color: AppColors.primary,
+                          size: 18,
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Chat Support',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
+                          'Live Chat',
+                          style: GoogleFonts.geist(
+                            color: AppColors.textPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),

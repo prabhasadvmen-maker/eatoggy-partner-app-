@@ -17,19 +17,24 @@ class FaqAccordionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: 240),
       curve: Curves.easeInOut,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isExpanded ? goldColor : const Color(0xFF262628),
+          color: isExpanded ? AppColors.primary : AppColors.border,
           width: isExpanded ? 1.3 : 1.0,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: InkWell(
         onTap: onTap,
@@ -46,10 +51,10 @@ class FaqAccordionCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       faq.title,
-                      style: GoogleFonts.inter(
-                        color: isExpanded ? goldColor : Colors.white,
+                      style: GoogleFonts.geist(
+                        color: isExpanded ? AppColors.primary : AppColors.textPrimary,
                         fontSize: 15,
-                        fontWeight: isExpanded ? FontWeight.w700 : FontWeight.w600,
+                        fontWeight: isExpanded ? FontWeight.w600 : FontWeight.w500,
                         letterSpacing: -0.1,
                       ),
                     ),
@@ -58,7 +63,7 @@ class FaqAccordionCard extends StatelessWidget {
                     isExpanded
                         ? Icons.keyboard_arrow_up_rounded
                         : Icons.keyboard_arrow_down_rounded,
-                    color: isExpanded ? goldColor : const Color(0xFF8E8E93),
+                    color: isExpanded ? AppColors.primary : AppColors.textSecondary,
                     size: 24,
                   ),
                 ],
@@ -71,8 +76,8 @@ class FaqAccordionCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     faq.answer,
-                    style: GoogleFonts.inter(
-                      color: const Color(0xFFCCCCCC),
+                    style: GoogleFonts.geist(
+                      color: AppColors.textSecondary,
                       fontSize: 13.5,
                       fontWeight: FontWeight.w400,
                       height: 1.45,

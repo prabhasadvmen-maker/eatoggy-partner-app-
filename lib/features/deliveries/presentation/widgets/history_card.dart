@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../data/models/delivery_history_model.dart';
 
 class HistoryCard extends StatelessWidget {
@@ -15,21 +18,19 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFailed = history.status == HistoryStatus.failed;
-    final isZeroEarnings = history.earningsText == '₹0.00';
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF171719),
-          borderRadius: BorderRadius.circular(18),
+          color: AppColors.card,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
-            color: const Color(0xFF262628),
-            width: 0.8,
+            color: AppColors.border,
+            width: 1.0,
           ),
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,45 +40,41 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   history.orderId,
-                  style: AppTextStyles.titleMedium.copyWith(
+                  style: GoogleFonts.inter(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
                 ),
                 const Spacer(),
-                _buildStatusBadge(history.status, history.statusText),
+                StatusBadge(text: history.statusText),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
-            // Customer Name (Serif Fraunces in Warm Cream)
+            // Customer Name (Fraunces in Stone Charcoal)
             Text(
               history.customerName,
-              style: AppTextStyles.headingSmall.copyWith(
-                color: AppColors.creamText,
+              style: GoogleFonts.fraunces(
+                color: AppColors.textPrimary,
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(height: 4),
 
-            // Timestamp (Muted Grey)
+            // Timestamp (Stone Gray)
             Text(
               history.timestamp,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textMutedDark,
+                color: AppColors.textSecondary,
                 fontSize: 13,
-                fontWeight: FontWeight.w400,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
             // Divider Line
-            Container(
-              height: 1,
-              color: const Color(0xFF242426),
-            ),
+            const Divider(color: AppColors.border, height: 1),
             const SizedBox(height: 12),
 
             // Bottom Earnings Credited Row
@@ -86,61 +83,22 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   'Earnings Credited',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textMutedDark,
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
                     fontSize: 13,
                   ),
                 ),
                 Text(
                   history.earningsText,
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: isZeroEarnings || isFailed
-                        ? AppColors.textMutedDark
-                        : AppColors.cardGoldAccent,
+                  style: GoogleFonts.fraunces(
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    fontSize: 17,
                   ),
                 ),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusBadge(HistoryStatus status, String text) {
-    Color borderColor;
-    Color bgColor;
-    Color textColor;
-
-    switch (status) {
-      case HistoryStatus.failed:
-        borderColor = const Color(0xFFE53935);
-        bgColor = const Color(0xFF251010);
-        textColor = const Color(0xFFEF5350);
-        break;
-      case HistoryStatus.delivered:
-        borderColor = const Color(0xFF00C853);
-        bgColor = const Color(0xFF0C1F15);
-        textColor = const Color(0xFF00E676);
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: borderColor, width: 0.9),
-      ),
-      child: Text(
-        text,
-        style: AppTextStyles.caption.copyWith(
-          color: textColor,
-          fontSize: 10.5,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.3,
         ),
       ),
     );

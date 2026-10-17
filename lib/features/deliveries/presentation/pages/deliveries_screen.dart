@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../bloc/deliveries_bloc.dart';
@@ -74,7 +75,7 @@ class DeliveriesView extends StatelessWidget {
         final categories = state.categories;
 
         return Scaffold(
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.scaffoldBackground,
           body: SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -82,34 +83,33 @@ class DeliveriesView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Page Header Title (Serif Fraunces)
+                  // Page Header Title (Fraunces)
                   Text(
                     state.headerTitle,
-                    style: AppTextStyles.displayLarge.copyWith(
-                      color: AppColors.creamText,
+                    style: GoogleFonts.fraunces(
+                      color: AppColors.textPrimary,
                       fontSize: 26,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.3,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
 
-                  // Page Header Subtitle (Muted Grey)
+                  // Page Header Subtitle (Stone Gray)
                   Text(
                     state.headerSubtitle,
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textMutedDark,
+                      color: AppColors.textSecondary,
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   const SizedBox(height: 24),
 
-                  // 2x2 Menu Cards with strictly identical sizes matching reference image
+                  // 2x2 Menu Cards matching DELIVERY NAV.svg
                   if (categories.length >= 4) ...[
                     // Row 1: Today's Deliveries & Delivery History
                     SizedBox(
-                      height: 182,
+                      height: 165,
                       child: Row(
                         children: [
                           Expanded(
@@ -140,7 +140,7 @@ class DeliveriesView extends StatelessWidget {
 
                     // Row 2: Tiffin Zone & Tiffin Subscribers
                     SizedBox(
-                      height: 182,
+                      height: 165,
                       child: Row(
                         children: [
                           Expanded(

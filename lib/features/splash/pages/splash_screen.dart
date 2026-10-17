@@ -63,8 +63,9 @@ class _SplashViewState extends State<SplashView>
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.goldFont;
-    const bgColor = AppColors.splashBackground;
+    final textPrimary = AppColors.textPrimary;
+    final textSecondary = AppColors.textSecondary;
+    const bgColor = AppColors.background;
 
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
@@ -76,20 +77,20 @@ class _SplashViewState extends State<SplashView>
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // Soft Radial Golden Background Glow in Center
+            // Soft Radial Pinkish-Red Glow in Center matching d01-splash.svg
             Center(
               child: Container(
-                width: 75.w,
-                height: 75.w,
+                width: 80.w,
+                height: 80.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      goldColor.withValues(alpha: 0.18),
-                      goldColor.withValues(alpha: 0.06),
+                      AppColors.primaryGlow.withValues(alpha: 0.6),
+                      AppColors.primaryGlow.withValues(alpha: 0.2),
                       Colors.transparent,
                     ],
-                    stops: const [0.0, 0.5, 1.0],
+                    stops: const [0.0, 0.55, 1.0],
                   ),
                 ),
               ),
@@ -106,7 +107,7 @@ class _SplashViewState extends State<SplashView>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Center Logo Icon & EATOGGY Text Row (Matches Image exactly)
+                            // Center Logo Icon & EATOGGY Text Row
                             Container(
                               width: 48.w,
                               height: 48.w,
@@ -120,44 +121,63 @@ class _SplashViewState extends State<SplashView>
                                   errorBuilder:
                                       (context, error, stackTrace) =>
                                           Container(
-                                            color: goldColor,
+                                            color: AppColors.primaryLight,
                                             child: const Icon(
                                               Icons.restaurant,
-                                              color: bgColor,
+                                              color: AppColors.primary,
+                                              size: 40,
                                             ),
                                           ),
                                 ),
                               ),
                             ),
-                            // Bottom Subtitles (DELIVERY PARTNER & Luxurious Gourmet Logistics)
+                            const SizedBox(height: 16),
+                            // Subtitles (DELIVERY PARTNER & Luxurious Gourmet Logistics)
                             Column(
                               children: [
                                 Text(
                                   'DELIVERY PARTNER',
                                   style: GoogleFonts.geist(
-                                    fontSize: 18.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: goldColor,
+                                    color: textPrimary,
+                                    letterSpacing: 2.2,
                                   ),
                                 ),
-                                SizedBox(height: 0.6.h),
+                                SizedBox(height: 0.8.h),
                                 Text(
                                   'Luxurious Gourmet Logistics',
                                   style: GoogleFonts.geist(
-                                    fontSize: 14.sp,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.white38,
-                                    letterSpacing: 0.5,
+                                    color: textSecondary,
+                                    letterSpacing: 0.6,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 6.h),
+                            SizedBox(height: 4.h),
                           ],
                         ),
                       ),
                     );
                   },
+                ),
+              ),
+            ),
+            // Bottom indicator pill matching d01-splash.svg
+            Positioned(
+              bottom: 16,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  width: 140,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: AppColors.borderMedium.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(2.5),
+                  ),
                 ),
               ),
             ),

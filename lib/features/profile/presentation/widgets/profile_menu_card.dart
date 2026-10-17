@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 class ProfileMenuCard extends StatelessWidget {
   final VoidCallback onSupportTap;
   final VoidCallback onSettingsTap;
+  final VoidCallback? onPerformanceTap;
   final VoidCallback onEmergencyTap;
   final VoidCallback onAboutTap;
   final VoidCallback onLogoutTap;
@@ -13,6 +14,7 @@ class ProfileMenuCard extends StatelessWidget {
     super.key,
     required this.onSupportTap,
     required this.onSettingsTap,
+    this.onPerformanceTap,
     required this.onEmergencyTap,
     required this.onAboutTap,
     required this.onLogoutTap,
@@ -23,57 +25,75 @@ class ProfileMenuCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF262628),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Column(
         children: [
           _buildMenuItem(
             icon: Icons.headphones_rounded,
             title: 'Support',
-            iconColor: AppColors.cardGoldAccent,
-            iconBg: const Color(0xFF231E14),
-            textColor: Colors.white,
+            iconColor: AppColors.primary,
+            iconBg: const Color(0xFFFFF1F2),
+            textColor: AppColors.textPrimary,
             onTap: onSupportTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
           _buildMenuItem(
             icon: Icons.settings_rounded,
             title: 'Settings',
-            iconColor: AppColors.cardGoldAccent,
-            iconBg: const Color(0xFF231E14),
-            textColor: Colors.white,
+            iconColor: AppColors.primary,
+            iconBg: const Color(0xFFFFF1F2),
+            textColor: AppColors.textPrimary,
             onTap: onSettingsTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
+          if (onPerformanceTap != null) ...[
+            _buildMenuItem(
+              icon: Icons.military_tech_rounded,
+              title: 'Performance Scorecard & Tier',
+              iconColor: const Color(0xFFD97706),
+              iconBg: const Color(0xFFFEF3C7),
+              textColor: AppColors.textPrimary,
+              onTap: onPerformanceTap!,
+            ),
+            const Divider(height: 1, thickness: 1, color: AppColors.border),
+          ],
           _buildMenuItem(
             icon: Icons.warning_amber_rounded,
             title: 'Emergency Report',
-            iconColor: AppColors.cardGoldAccent,
-            iconBg: const Color(0xFF231E14),
-            textColor: Colors.white,
+            iconColor: const Color(0xFFD97706),
+            iconBg: const Color(0xFFFEF3C7),
+            textColor: AppColors.textPrimary,
             onTap: onEmergencyTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
           _buildMenuItem(
             icon: Icons.info_outline_rounded,
             title: 'About EATOGGY',
-            iconColor: AppColors.cardGoldAccent,
-            iconBg: const Color(0xFF231E14),
-            textColor: Colors.white,
+            iconColor: AppColors.textSecondary,
+            iconBg: const Color(0xFFF5F5F4),
+            textColor: AppColors.textPrimary,
             onTap: onAboutTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
           _buildMenuItem(
             icon: Icons.logout_rounded,
             title: 'Logout',
-            iconColor: const Color(0xFFE54D4D),
-            iconBg: const Color(0xFF2A1616),
-            textColor: const Color(0xFFE54D4D),
+            iconColor: const Color(0xFFDC2626),
+            iconBg: const Color(0xFFFFF1F2),
+            textColor: const Color(0xFFDC2626),
             onTap: onLogoutTap,
           ),
         ],
@@ -115,17 +135,17 @@ class ProfileMenuCard extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.geist(
                   color: textColor,
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   letterSpacing: -0.1,
                 ),
               ),
             ),
             const Icon(
               Icons.chevron_right_rounded,
-              color: Color(0xFF6E6E73),
+              color: AppColors.textMuted,
               size: 22,
             ),
           ],

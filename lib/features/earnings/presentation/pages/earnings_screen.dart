@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/earnings_bloc.dart';
 import '../../bloc/earnings_event.dart';
 import '../../bloc/earnings_state.dart';
+import '../widgets/customer_tip_celebration_modal.dart';
 import '../widgets/earnings_breakdown_card.dart';
 import '../widgets/earnings_overview_card.dart';
 import '../widgets/withdraw_money_card.dart';
@@ -33,24 +37,25 @@ class EarningsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBackground,
+      backgroundColor: AppColors.scaffoldBackground,
       body: SafeArea(
         child: BlocConsumer<EarningsBloc, EarningsState>(
           listener: (context, state) {
             if (state.statusMessage != null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: const Color(0xFF1E1E20),
+                  backgroundColor: AppColors.surface,
                   content: Text(
                     state.statusMessage!,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.cardGoldAccent,
+                    style: GoogleFonts.inter(
+                      color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: AppRadius.borderMd,
+                    side: const BorderSide(color: AppColors.border),
                   ),
                 ),
               );
@@ -61,7 +66,7 @@ class EarningsView extends StatelessWidget {
             if (data == null) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.cardGoldAccent,
+                  color: AppColors.primary,
                 ),
               );
             }
@@ -74,15 +79,16 @@ class EarningsView extends StatelessWidget {
                 children: [
                   // Top Segmented Time Period Bar
                   Container(
-                    height: 46,
+                    height: 44,
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF171719),
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: const Color(0xFF262628),
-                        width: 0.8,
+                        color: AppColors.border,
+                        width: 1.0,
                       ),
+                      boxShadow: AppShadows.card,
                     ),
                     child: Row(
                       children: _periods.map((period) {
@@ -99,22 +105,16 @@ class EarningsView extends StatelessWidget {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? const Color(0xFF222225)
+                                    ? AppColors.primary
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
-                                border: isSelected
-                                    ? Border.all(
-                                        color: const Color(0xFF333336),
-                                        width: 0.8,
-                                      )
-                                    : null,
                               ),
                               child: Text(
                                 period,
-                                style: AppTextStyles.caption.copyWith(
+                                style: TextStyle(
                                   color: isSelected
-                                      ? AppColors.cardGoldAccent
-                                      : AppColors.textMutedDark,
+                                      ? Colors.white
+                                      : AppColors.textSecondary,
                                   fontWeight: isSelected
                                       ? FontWeight.w700
                                       : FontWeight.w500,
@@ -136,8 +136,8 @@ class EarningsView extends StatelessWidget {
                   // Section: "Withdraw Money"
                   Text(
                     'Withdraw Money',
-                    style: AppTextStyles.headingSmall.copyWith(
-                      color: AppColors.creamText,
+                    style: GoogleFonts.fraunces(
+                      color: AppColors.textPrimary,
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
@@ -159,11 +159,15 @@ class EarningsView extends StatelessWidget {
                   ),
                   const SizedBox(height: 22),
 
+                  // Fleet Financial Hub
+                  _buildFleetFinancesHub(context),
+                  const SizedBox(height: 22),
+
                   // Section: "Breakdown"
                   Text(
                     'Breakdown',
-                    style: AppTextStyles.headingSmall.copyWith(
-                      color: AppColors.creamText,
+                    style: GoogleFonts.fraunces(
+                      color: AppColors.textPrimary,
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
@@ -182,6 +186,252 @@ class EarningsView extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildFleetFinancesHub(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Fleet Financial Hub',
+          style: GoogleFonts.fraunces(
+            color: AppColors.textPrimary,
+            fontSize: 19,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.2,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            // Cash In Hand Management (Screen #4)
+            Expanded(
+              child: InkWell(
+                onTap: () => context.push(AppRoutes.cashInHand),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: AppShadows.card,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFEF3C7),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.account_balance_wallet_rounded,
+                          color: Color(0xFFD97706),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Cash in Hand',
+                        style: GoogleFonts.geist(
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'COD: ₹1,847.00',
+                        style: GoogleFonts.fraunces(
+                          color: const Color(0xFFD97706),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Payout Statement PDF (Screen #11)
+            Expanded(
+              child: InkWell(
+                onTap: () => context.push(AppRoutes.payoutStatement),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: AppShadows.card,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFEFF6FF),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.receipt_long_rounded,
+                          color: Color(0xFF2563EB),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Pay Statements',
+                        style: GoogleFonts.geist(
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'PDF Statements',
+                        style: GoogleFonts.geist(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            // Incentive Quests (Screen #3)
+            Expanded(
+              child: InkWell(
+                onTap: () => context.push(AppRoutes.incentiveQuests),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: AppShadows.card,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF0FDF4),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.military_tech_rounded,
+                          color: Color(0xFF16A34A),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Quests',
+                              style: GoogleFonts.geist(
+                                color: AppColors.textPrimary,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '+₹450 bonus',
+                              style: GoogleFonts.geist(
+                                color: const Color(0xFF16A34A),
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Tip Celebration Modal (Screen #10)
+            Expanded(
+              child: InkWell(
+                onTap: () => CustomerTipCelebrationModal.show(context),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: AppShadows.card,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFEF2F2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.volunteer_activism_rounded,
+                          color: Color(0xFFDC2626),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tips Received',
+                              style: GoogleFonts.geist(
+                                color: AppColors.textPrimary,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              'Preview modal',
+                              style: GoogleFonts.geist(
+                                color: const Color(0xFFDC2626),
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

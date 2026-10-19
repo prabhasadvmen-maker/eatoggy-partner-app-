@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/today_assignments/today_assignments_bloc.dart';
 import '../../bloc/today_assignments/today_assignments_event.dart';
 import '../../bloc/today_assignments/today_assignments_state.dart';
 import '../widgets/assignment_card.dart';
+import 'delivery_details_screen.dart';
+import 'active_tour_screen.dart';
 
 class TodayAssignmentsScreen extends StatelessWidget {
   final VoidCallback? onBack;
@@ -47,14 +51,14 @@ class TodayAssignmentsView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: AppColors.scaffoldBackground,
         body: SafeArea(
           child: BlocBuilder<TodayAssignmentsBloc, TodayAssignmentsState>(
             builder: (context, state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top Header & Filter Chips (Pinned at top)
+                  // Top Header & Filter Chips
                   Padding(
                     padding: const EdgeInsets.fromLTRB(18, 16, 18, 0),
                     child: Column(
@@ -63,50 +67,53 @@ class TodayAssignmentsView extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (onBack != null) ...[
-                              GestureDetector(
-                                onTap: onBack,
-                                behavior: HitTestBehavior.opaque,
-                                child: Container(
-                                  width: 38,
-                                  height: 38,
-                                  margin: const EdgeInsets.only(right: 12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF1B1B1D),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFF2C2C2E),
-                                      width: 0.8,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    color: AppColors.creamText,
-                                    size: 16,
+                            GestureDetector(
+                              onTap: () {
+                                if (onBack != null) {
+                                  onBack!();
+                                } else if (Navigator.canPop(context)) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                width: 38,
+                                height: 38,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.border,
+                                    width: 1.0,
                                   ),
                                 ),
+                                child: const Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  color: AppColors.textPrimary,
+                                  size: 16,
+                                ),
                               ),
-                            ],
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Today's Assignments",
-                                    style: AppTextStyles.displayLarge.copyWith(
-                                      color: AppColors.creamText,
-                                      fontSize: 24,
+                                    style: GoogleFonts.fraunces(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: -0.3,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 2),
                                   Text(
                                     '${state.totalScheduled} Scheduled Deliveries',
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.textMutedDark,
-                                      fontSize: 13.5,
-                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.textSecondary,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ],
@@ -114,7 +121,7 @@ class TodayAssignmentsView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 16),
 
                         // Horizontal Filter Chips Row
                         SingleChildScrollView(
@@ -126,7 +133,7 @@ class TodayAssignmentsView extends StatelessWidget {
                                   state.selectedFilter == filter;
 
                               return Padding(
-                                padding: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.only(right: 8),
                                 child: GestureDetector(
                                   onTap: () {
                                     context.read<TodayAssignmentsBloc>().add(
@@ -136,30 +143,30 @@ class TodayAssignmentsView extends StatelessWidget {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16,
-                                      vertical: 9,
+                                      vertical: 8,
                                     ),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? AppColors.cardGoldAccent
-                                          : const Color(0xFF1B1B1D),
+                                          ? AppColors.primary
+                                          : AppColors.surface,
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
                                         color: isSelected
-                                            ? AppColors.cardGoldAccent
-                                            : const Color(0xFF2C2C2E),
-                                        width: 0.8,
+                                            ? AppColors.primary
+                                            : AppColors.border,
+                                        width: 1.0,
                                       ),
                                     ),
                                     child: Text(
                                       filter,
-                                      style: AppTextStyles.caption.copyWith(
+                                      style: TextStyle(
                                         color: isSelected
-                                            ? const Color(0xFF11110F)
-                                            : AppColors.textPrimaryDark,
+                                            ? Colors.white
+                                            : AppColors.textSecondary,
                                         fontWeight: isSelected
-                                            ? FontWeight.w800
+                                            ? FontWeight.w700
                                             : FontWeight.w500,
-                                        fontSize: 13,
+                                        fontSize: 12.5,
                                       ),
                                     ),
                                   ),
@@ -168,7 +175,7 @@ class TodayAssignmentsView extends StatelessWidget {
                             }).toList(),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                       ],
                     ),
                   ),
@@ -183,9 +190,59 @@ class TodayAssignmentsView extends StatelessWidget {
                         final assignment = state.filteredAssignments[index];
                         return AssignmentCard(
                           assignment: assignment,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DeliveryDetailsScreen(
+                                  orderId: assignment.orderId,
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
+                    ),
+                  ),
+
+                  // Start Route / Tour Bottom Bar
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.surface,
+                      border: Border(
+                        top: BorderSide(color: AppColors.border),
+                      ),
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ActiveTourScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.navigation_rounded, size: 20),
+                        label: Text(
+                          'Start Route (${state.filteredAssignments.length} Stops)',
+                          style: GoogleFonts.inter(
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

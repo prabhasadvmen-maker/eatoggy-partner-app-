@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../data/models/delivery_details_model.dart';
 
 class OrderPayloadCard extends StatelessWidget {
@@ -23,19 +24,8 @@ class OrderPayloadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF262628),
-          width: 1,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +33,7 @@ class OrderPayloadCard extends StatelessWidget {
           Text(
             'ORDER PAYLOAD & SLOT',
             style: GoogleFonts.inter(
-              color: goldColor,
+              color: AppColors.primary,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
@@ -58,7 +48,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 payloadTitle,
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -66,7 +56,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 packagesCount,
                 style: GoogleFonts.inter(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w700,
                 ),
@@ -82,7 +72,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 'Time Slot Allocation',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -90,7 +80,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 timeSlot,
                 style: GoogleFonts.inter(
-                  color: goldColor,
+                  color: AppColors.textPrimary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w700,
                 ),
@@ -102,8 +92,7 @@ class OrderPayloadCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 14),
             child: Divider(
               height: 1,
-              thickness: 1,
-              color: Color(0xFF262628),
+              color: AppColors.border,
             ),
           ),
 
@@ -111,7 +100,7 @@ class OrderPayloadCard extends StatelessWidget {
           Text(
             'ORDER ITEMS',
             style: GoogleFonts.inter(
-              color: goldColor,
+              color: AppColors.primary,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
@@ -131,15 +120,15 @@ class OrderPayloadCard extends StatelessWidget {
                       Text(
                         item.name,
                         style: GoogleFonts.inter(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         'x${item.quantity}',
                         style: GoogleFonts.inter(
-                          color: goldColor,
+                          color: AppColors.primary,
                           fontSize: 14.5,
                           fontWeight: FontWeight.w700,
                         ),
@@ -149,8 +138,7 @@ class OrderPayloadCard extends StatelessWidget {
                 ),
                 const Divider(
                   height: 1,
-                  thickness: 0.8,
-                  color: Color(0xFF222226),
+                  color: AppColors.borderSubtle,
                 ),
               ],
             );
@@ -164,7 +152,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 'Total Items:',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -172,7 +160,7 @@ class OrderPayloadCard extends StatelessWidget {
               Text(
                 '$totalItems',
                 style: GoogleFonts.inter(
-                  color: goldColor,
+                  color: AppColors.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
@@ -185,16 +173,16 @@ class OrderPayloadCard extends StatelessWidget {
           Text(
             'Delivery Notes:',
             style: GoogleFonts.inter(
-              color: const Color(0xFF8E8E93),
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             deliveryNotes,
             style: GoogleFonts.inter(
-              color: const Color(0xFFCCCCCC),
+              color: AppColors.textPrimary,
               fontSize: 13.5,
               fontWeight: FontWeight.w400,
               height: 1.4,

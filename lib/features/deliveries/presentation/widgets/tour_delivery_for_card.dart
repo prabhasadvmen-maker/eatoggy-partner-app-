@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class TourDeliveryForCard extends StatelessWidget {
   final String customerName;
@@ -16,19 +17,8 @@ class TourDeliveryForCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF262628),
-          width: 1,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,7 +26,7 @@ class TourDeliveryForCard extends StatelessWidget {
           Text(
             'DELIVERY FOR',
             style: GoogleFonts.inter(
-              color: goldColor,
+              color: AppColors.primary,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
@@ -44,11 +34,11 @@ class TourDeliveryForCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
 
-          // Customer Name (Fraunces Cream Serif)
+          // Customer Name (Fraunces Stone Charcoal Serif)
           Text(
             customerName,
             style: GoogleFonts.fraunces(
-              color: AppColors.creamText,
+              color: AppColors.textPrimary,
               fontSize: 20,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.2,
@@ -60,7 +50,7 @@ class TourDeliveryForCard extends StatelessWidget {
           Text(
             address,
             style: GoogleFonts.inter(
-              color: const Color(0xFF8E8E93),
+              color: AppColors.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.w400,
               height: 1.35,
@@ -71,8 +61,7 @@ class TourDeliveryForCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 14),
             child: Divider(
               height: 1,
-              thickness: 1,
-              color: Color(0xFF242426),
+              color: AppColors.border,
             ),
           ),
 
@@ -80,19 +69,18 @@ class TourDeliveryForCard extends StatelessWidget {
           Text(
             'Gate/Access Code:',
             style: GoogleFonts.inter(
-              color: const Color(0xFF8E8E93),
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             gateAccessCode,
             style: GoogleFonts.inter(
-              color: const Color(0xFFD6D6DA),
+              color: AppColors.textPrimary,
               fontSize: 14,
-              fontWeight: FontWeight.w400,
-              height: 1.4,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class DeliverySuccessBadge extends StatelessWidget {
   const DeliverySuccessBadge({super.key});
@@ -6,28 +7,21 @@ class DeliverySuccessBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 112,
-      height: 112,
+      width: 96,
+      height: 96,
       decoration: BoxDecoration(
-        color: const Color(0xFF141A16),
+        color: AppColors.successLight,
         shape: BoxShape.circle,
         border: Border.all(
-          color: const Color(0xFF00E676),
-          width: 3.2,
+          color: AppColors.success.withValues(alpha: 0.3),
+          width: 3.0,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF00E676).withValues(alpha: 0.28),
-            blurRadius: 28,
-            spreadRadius: 2,
-          ),
-        ],
       ),
       child: const Center(
         child: Icon(
           Icons.check_rounded,
-          color: Color(0xFF00E676),
-          size: 52,
+          color: AppColors.successText,
+          size: 48,
         ),
       ),
     );

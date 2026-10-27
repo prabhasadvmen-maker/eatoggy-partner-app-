@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../data/models/delivery_completion_model.dart';
 
 class DeliveryCompletionCard extends StatelessWidget {
@@ -13,17 +14,8 @@ class DeliveryCompletionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: const Color(0xFF161615),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF262624),
-          width: 1.0,
-        ),
-      ),
       child: Column(
         children: [
           // Row 1: Order ID
@@ -33,7 +25,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 'Order ID',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w400,
                 ),
@@ -41,7 +33,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 model.orderId,
                 style: GoogleFonts.inter(
-                  color: AppColors.creamText,
+                  color: AppColors.textPrimary,
                   fontSize: 15.5,
                   fontWeight: FontWeight.w700,
                 ),
@@ -57,7 +49,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 'Timestamp',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w400,
                 ),
@@ -65,7 +57,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 model.timestamp,
                 style: GoogleFonts.inter(
-                  color: const Color(0xFFE2E2E6),
+                  color: AppColors.textPrimary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w500,
                 ),
@@ -81,7 +73,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 'Customer',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w400,
                 ),
@@ -89,7 +81,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 model.customerName,
                 style: GoogleFonts.inter(
-                  color: AppColors.creamText,
+                  color: AppColors.textPrimary,
                   fontSize: 15.5,
                   fontWeight: FontWeight.w700,
                 ),
@@ -98,7 +90,7 @@ class DeliveryCompletionCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          const Divider(color: Color(0xFF262624), thickness: 1.0),
+          const Divider(color: AppColors.border, thickness: 1.0),
           const SizedBox(height: 16),
 
           // Row 4: Earnings Credited
@@ -108,7 +100,7 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 'Earnings Credited',
                 style: GoogleFonts.inter(
-                  color: const Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                 ),
@@ -116,8 +108,8 @@ class DeliveryCompletionCard extends StatelessWidget {
               Text(
                 model.earningsCredited,
                 style: GoogleFonts.fraunces(
-                  color: AppColors.cardGoldAccent,
-                  fontSize: 27,
+                  color: AppColors.textPrimary,
+                  fontSize: 26,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.5,
                 ),

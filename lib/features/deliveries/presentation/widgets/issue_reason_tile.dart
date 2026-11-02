@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class IssueReasonTile extends StatelessWidget {
   final String title;
@@ -20,29 +21,19 @@ class IssueReasonTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.borderLg,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
           decoration: BoxDecoration(
-            color: const Color(0xFF181816),
-            borderRadius: BorderRadius.circular(16),
+            color: AppColors.surface,
+            borderRadius: AppRadius.borderLg,
             border: Border.all(
-              color: isSelected
-                  ? AppColors.cardGoldAccent
-                  : const Color(0xFF282826),
-              width: isSelected ? 1.5 : 1.0,
+              color: isSelected ? AppColors.primary : AppColors.border,
+              width: isSelected ? 1.8 : 1.0,
             ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppColors.cardGoldAccent.withValues(alpha: 0.18),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
+            boxShadow: AppShadows.card,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,9 +43,9 @@ class IssueReasonTile extends StatelessWidget {
                   title,
                   style: GoogleFonts.inter(
                     color: isSelected
-                        ? AppColors.creamText
-                        : const Color(0xFFA1A1AA),
-                    fontSize: 15.5,
+                        ? AppColors.textPrimary
+                        : AppColors.textSecondary,
+                    fontSize: 15,
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
@@ -64,10 +55,8 @@ class IssueReasonTile extends StatelessWidget {
                 isSelected
                     ? Icons.radio_button_checked
                     : Icons.radio_button_off,
-                color: isSelected
-                    ? AppColors.cardGoldAccent
-                    : const Color(0xFF52525B),
-                size: 24,
+                color: isSelected ? AppColors.primary : AppColors.textPlaceholder,
+                size: 22,
               ),
             ],
           ),

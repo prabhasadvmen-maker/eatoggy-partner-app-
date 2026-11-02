@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/delivery_issue_report/delivery_issue_report_bloc.dart';
 import '../../bloc/delivery_issue_report/delivery_issue_report_event.dart';
 import '../../bloc/delivery_issue_report/delivery_issue_report_state.dart';
@@ -55,60 +56,60 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: const Color(0xFF181816),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(22),
-          side: const BorderSide(color: Color(0xFF2E2E2A)),
+        backgroundColor: AppColors.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppRadius.borderLg,
+          side: BorderSide(color: AppColors.border),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: 58,
+              height: 58,
               decoration: BoxDecoration(
-                color: const Color(0xFFE55353).withValues(alpha: 0.15),
+                color: AppColors.errorLight,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: const Color(0xFFE55353).withValues(alpha: 0.5),
+                  color: AppColors.error.withValues(alpha: 0.3),
                   width: 1.5,
                 ),
               ),
               child: const Icon(
                 Icons.assignment_late_outlined,
-                color: Color(0xFFE55353),
-                size: 34,
+                color: AppColors.error,
+                size: 32,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             Text(
               'Report Submitted',
               textAlign: TextAlign.center,
               style: GoogleFonts.fraunces(
-                color: AppColors.creamText,
+                color: AppColors.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               'Issue "$reason" logged for order $orderId. Fleet support will review and advise.',
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondaryDark,
+                color: AppColors.textSecondary,
                 fontSize: 13.5,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.cardGoldAccent,
-                  foregroundColor: const Color(0xFF11110F),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: AppRadius.borderLg,
                   ),
                   elevation: 0,
                 ),
@@ -119,7 +120,6 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                 child: Text(
                   'Acknowledge & Close',
                   style: GoogleFonts.inter(
-                    color: const Color(0xFF11110F),
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -148,11 +148,11 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
         final report = state.report;
 
         return Scaffold(
-          backgroundColor: AppColors.darkBackground,
+          backgroundColor: AppColors.scaffoldBackground,
           body: SafeArea(
             child: Column(
               children: [
-                // Top subtle back bar
+                // Top back bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Row(
@@ -164,16 +164,17 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1E1E1C),
+                            color: AppColors.surface,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF2E2E2A),
+                              color: AppColors.border,
                               width: 1.0,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           child: const Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: AppColors.creamText,
+                            color: AppColors.textPrimary,
                             size: 16,
                           ),
                         ),
@@ -192,30 +193,29 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                       children: [
                         const SizedBox(height: 8),
 
-                        // Title: "Report Issue" (Coral/Red Serif)
+                        // Title: "Report Issue" (Fraunces Crimson)
                         Text(
                           'Report Issue',
                           style: GoogleFonts.fraunces(
-                            color: const Color(0xFFE55353),
-                            fontSize: 32,
+                            color: AppColors.primary,
+                            fontSize: 30,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.4,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
 
                         // Subtitle: "Please specify the accurate reason for delivery failure"
                         Text(
                           'Please specify the accurate reason for delivery failure',
-                          style: GoogleFonts.inter(
-                            color: const Color(0xFF8E8E93),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                            fontSize: 14.5,
                           ),
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 24),
 
-                        // 4 Selectable Reasons
+                        // Selectable Reasons
                         ...report.availableReasons.map((reason) {
                           final isSelected = report.selectedReason == reason;
                           return IssueReasonTile(
@@ -229,29 +229,30 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                           );
                         }),
 
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 16),
 
                         // Label: Additional Notes
                         Text(
                           'Additional Notes',
                           style: GoogleFonts.inter(
-                            color: const Color(0xFF8E8E93),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                            color: AppColors.textSecondary,
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
 
                         // Input Box: Additional Notes
                         Container(
-                          height: 110,
+                          height: 100,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF161615),
-                            borderRadius: BorderRadius.circular(16),
+                            color: AppColors.surface,
+                            borderRadius: AppRadius.borderLg,
                             border: Border.all(
-                              color: const Color(0xFF282826),
+                              color: AppColors.border,
                               width: 1.0,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -266,44 +267,37 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                                   .add(UpdateAdditionalNotesEvent(val));
                             },
                             style: GoogleFonts.inter(
-                              color: AppColors.creamText,
+                              color: AppColors.textPrimary,
                               fontSize: 14,
                               height: 1.4,
                             ),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               filled: false,
-                              fillColor: Colors.transparent,
                               hintText:
                                   "Type specific details here (e.g. gate code failed, client's phone switched off)...",
-                              hintStyle: TextStyle(
-                                color: Color(0xFF52525B),
-                                fontSize: 13.5,
-                                height: 1.35,
+                              hintStyle: GoogleFonts.inter(
+                                color: AppColors.textPlaceholder,
+                                fontSize: 13,
                               ),
                               border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              focusedErrorBorder: InputBorder.none,
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 20),
 
                         // Label: Photo Evidence (Optional)
                         Text(
                           'Photo Evidence (Optional)',
                           style: GoogleFonts.inter(
-                            color: const Color(0xFF8E8E93),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                            color: AppColors.textSecondary,
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
 
                         // Photo Evidence Box
                         PhotoEvidenceBox(
@@ -315,63 +309,48 @@ class _ReportDeliveryIssueViewState extends State<ReportDeliveryIssueView> {
                           },
                         ),
 
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 28),
 
-                        // Gold Submit Button: "Submit Report"
-                        InkWell(
-                          onTap: state.status == IssueReportStatus.submitting
-                              ? null
-                              : () {
-                                  context
-                                      .read<DeliveryIssueReportBloc>()
-                                      .add(const SubmitDeliveryIssueReportEvent());
-                                },
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            width: double.infinity,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFE8B669),
-                                  Color(0xFFD69C45),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
+                        // Crimson Submit Button: "Submit Report"
+                        SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: state.status == IssueReportStatus.submitting
+                                ? null
+                                : () {
+                                    context
+                                        .read<DeliveryIssueReportBloc>()
+                                        .add(const SubmitDeliveryIssueReportEvent());
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: AppRadius.borderLg,
                               ),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFFD69C45).withValues(alpha: 0.3),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
                             ),
-                            child: Center(
-                              child: state.status == IssueReportStatus.submitting
-                                  ? const SizedBox(
-                                      width: 22,
-                                      height: 22,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        color: Color(0xFF11110F),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Submit Report',
-                                      style: GoogleFonts.inter(
-                                        color: const Color(0xFF11110F),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 0.1,
-                                      ),
+                            child: state.status == IssueReportStatus.submitting
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: Colors.white,
                                     ),
-                            ),
+                                  )
+                                : Text(
+                                    'Submit Report',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 15.5,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                           ),
                         ),
 
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),

@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class ZoneRadarCard extends StatelessWidget {
   final String zoneName;
@@ -17,23 +18,24 @@ class ZoneRadarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF171719),
-        borderRadius: BorderRadius.circular(18),
+        color: AppColors.surface,
+        borderRadius: AppRadius.borderLg,
         border: Border.all(
-          color: const Color(0xFF262628),
-          width: 0.8,
+          color: AppColors.border,
+          width: 1.0,
         ),
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Visual Radar & Map Container
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(17)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Container(
               height: 145,
               width: double.infinity,
-              color: const Color(0xFF0E0E10),
+              color: const Color(0xFFF7F4EE),
               child: CustomPaint(
                 painter: _ZoneMapRadarPainter(),
               ),
@@ -48,17 +50,17 @@ class ZoneRadarCard extends StatelessWidget {
               children: [
                 Text(
                   zoneName,
-                  style: AppTextStyles.headingSmall.copyWith(
-                    color: AppColors.creamText,
-                    fontSize: 17.5,
+                  style: GoogleFonts.fraunces(
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
                 Text(
                   zoneSubtitle,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textMutedDark,
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                   ),
@@ -77,27 +79,21 @@ class _ZoneMapRadarPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width * 0.49, size.height * 0.48);
 
-    // Subtle background radial glow behind the center target
+    // Subtle background radial glow
     final glowPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          const Color(0xFFE5A64E).withValues(alpha: 0.18),
-          const Color(0xFFE5A64E).withValues(alpha: 0.04),
+          AppColors.primary.withValues(alpha: 0.12),
+          AppColors.primary.withValues(alpha: 0.03),
           Colors.transparent,
         ],
         stops: const [0.0, 0.45, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: 85));
     canvas.drawCircle(center, 85, glowPaint);
 
-    // Network road lines / rays originating from center
     final rayPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.20)
-      ..strokeWidth = 0.9
-      ..style = PaintingStyle.stroke;
-
-    final faintRayPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.10)
-      ..strokeWidth = 0.6
+      ..color = const Color(0xFFD6D3D1)
+      ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
     const numRays = 18;
@@ -108,7 +104,7 @@ class _ZoneMapRadarPainter extends CustomPainter {
         center.dx + rayLength * math.cos(angle),
         center.dy + rayLength * math.sin(angle),
       );
-      canvas.drawLine(center, end, (i % 2 == 0) ? rayPaint : faintRayPaint);
+      canvas.drawLine(center, end, rayPaint);
     }
 
     // Branching cross-roads
@@ -125,43 +121,35 @@ class _ZoneMapRadarPainter extends CustomPainter {
 
     // Concentric Radar Rings
     final ringPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.70)
-      ..strokeWidth = 1.4
+      ..color = AppColors.primary.withValues(alpha: 0.6)
+      ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
     final outerRingPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.35)
-      ..strokeWidth = 0.8
+      ..color = AppColors.primary.withValues(alpha: 0.25)
+      ..strokeWidth = 0.9
       ..style = PaintingStyle.stroke;
 
-    final innerRingPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.45)
-      ..strokeWidth = 0.8
-      ..style = PaintingStyle.stroke;
-
-    // Rings
-    canvas.drawCircle(center, 12, innerRingPaint);
-    canvas.drawCircle(center, 24, ringPaint);
-    canvas.drawCircle(center, 38, innerRingPaint);
-    canvas.drawCircle(center, 56, outerRingPaint);
+    canvas.drawCircle(center, 12, outerRingPaint);
+    canvas.drawCircle(center, 26, ringPaint);
+    canvas.drawCircle(center, 44, outerRingPaint);
+    canvas.drawCircle(center, 64, outerRingPaint);
 
     // Center hub point
     final hubPaint = Paint()
-      ..color = const Color(0xFFE5A64E)
+      ..color = AppColors.primary
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, 3.2, hubPaint);
+    canvas.drawCircle(center, 4.0, hubPaint);
 
-    // Location labels: "INDIRANAGAR" (left) and "KORAMANGALA" (right)
+    // Location labels
     final textStyle = TextStyle(
-      color: const Color(0xFFE5A64E).withValues(alpha: 0.60),
+      color: AppColors.textPrimary.withValues(alpha: 0.7),
       fontSize: 8.5,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.8,
     );
 
-    final textPainter = TextPainter(
-      textDirection: TextDirection.ltr,
-    );
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     textPainter.text = TextSpan(text: 'INDIRANAGAR', style: textStyle);
     textPainter.layout();
@@ -170,29 +158,6 @@ class _ZoneMapRadarPainter extends CustomPainter {
     textPainter.text = TextSpan(text: 'KORAMANGALA', style: textStyle);
     textPainter.layout();
     textPainter.paint(canvas, Offset(center.dx + 38, center.dy - 6));
-
-    // Compass star at bottom-left corner
-    _drawCompassStar(canvas, Offset(24, size.height - 24));
-  }
-
-  void _drawCompassStar(Canvas canvas, Offset pos) {
-    final starPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.65)
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // 4-point cross star
-    canvas.drawLine(Offset(pos.dx - 7, pos.dy), Offset(pos.dx + 7, pos.dy), starPaint);
-    canvas.drawLine(Offset(pos.dx, pos.dy - 7), Offset(pos.dx, pos.dy + 7), starPaint);
-
-    // Diagonal subtle points
-    final diagPaint = Paint()
-      ..color = const Color(0xFFE5A64E).withValues(alpha: 0.35)
-      ..strokeWidth = 0.7
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawLine(Offset(pos.dx - 3.5, pos.dy - 3.5), Offset(pos.dx + 3.5, pos.dy + 3.5), diagPaint);
-    canvas.drawLine(Offset(pos.dx - 3.5, pos.dy + 3.5), Offset(pos.dx + 3.5, pos.dy - 3.5), diagPaint);
   }
 
   @override

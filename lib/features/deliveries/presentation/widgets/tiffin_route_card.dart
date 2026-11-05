@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../data/models/tiffin_zone_model.dart';
 
 class TiffinRouteCard extends StatelessWidget {
@@ -21,12 +23,13 @@ class TiffinRouteCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF171719),
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
-            color: const Color(0xFF262628),
-            width: 0.8,
+            color: AppColors.border,
+            width: 1.0,
           ),
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,30 +40,25 @@ class TiffinRouteCard extends StatelessWidget {
               children: [
                 Text(
                   stop.timeSlot,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.cardGoldAccent,
+                  style: GoogleFonts.inter(
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w700,
                     fontSize: 12.5,
                     letterSpacing: 0.2,
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF251C12),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: const Color(0xFF45301B),
-                      width: 0.8,
-                    ),
+                    color: AppColors.primaryLight,
+                    borderRadius: BorderRadius.circular(100),
                   ),
                   child: Text(
                     stop.tiffinsCount,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.cardGoldAccent,
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.3,
+                    style: GoogleFonts.inter(
+                      color: AppColors.primary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -68,23 +66,23 @@ class TiffinRouteCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Customer Name (Serif Fraunces in Warm Cream)
+            // Customer Name
             Text(
               stop.customerName,
-              style: AppTextStyles.headingSmall.copyWith(
-                color: AppColors.creamText,
+              style: GoogleFonts.fraunces(
+                color: AppColors.textPrimary,
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
 
             // Pin Icon & Address Row
             Row(
               children: [
                 const Icon(
                   Icons.location_on_outlined,
-                  color: AppColors.textMutedDark,
+                  color: AppColors.textSecondary,
                   size: 15,
                 ),
                 const SizedBox(width: 5),
@@ -92,9 +90,8 @@ class TiffinRouteCard extends StatelessWidget {
                   child: Text(
                     stop.address,
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textMutedDark,
+                      color: AppColors.textSecondary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

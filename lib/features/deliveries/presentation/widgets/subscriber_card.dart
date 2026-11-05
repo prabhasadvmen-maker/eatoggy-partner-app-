@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../data/models/tiffin_subscriber_model.dart';
 
 class SubscriberCard extends StatelessWidget {
@@ -23,12 +26,13 @@ class SubscriberCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF171719),
-          borderRadius: BorderRadius.circular(18),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
-            color: const Color(0xFF262628),
-            width: 0.8,
+            color: AppColors.border,
+            width: 1.0,
           ),
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,27 +41,16 @@ class SubscriberCard extends StatelessWidget {
             Row(
               children: [
                 // Avatar
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF252528),
-                      borderRadius: BorderRadius.circular(22),
-                      border: Border.all(
-                        color: const Color(0xFF38383C),
-                        width: 1,
-                      ),
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: AppColors.surfaceSubtle,
+                  child: Text(
+                    subscriber.name.isNotEmpty ? subscriber.name[0] : 'U',
+                    style: GoogleFonts.fraunces(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
-                    child: subscriber.avatarUrl.isNotEmpty
-                        ? Image.network(
-                            subscriber.avatarUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                _buildInitialsAvatar(),
-                          )
-                        : _buildInitialsAvatar(),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -69,19 +62,19 @@ class SubscriberCard extends StatelessWidget {
                     children: [
                       Text(
                         subscriber.name,
-                        style: AppTextStyles.headingSmall.copyWith(
-                          color: AppColors.creamText,
+                        style: GoogleFonts.fraunces(
+                          color: AppColors.textPrimary,
                           fontSize: 16.5,
                           fontWeight: FontWeight.w700,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 3),
+                      const SizedBox(height: 2),
                       Text(
                         subscriber.plan,
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.cardGoldAccent,
+                        style: GoogleFonts.inter(
+                          color: AppColors.primary,
                           fontSize: 12.5,
                           fontWeight: FontWeight.w600,
                         ),
@@ -97,18 +90,18 @@ class SubscriberCard extends StatelessWidget {
                     if (subscriber.isNew) ...[
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 7.5,
+                          horizontal: 8,
                           vertical: 3.5,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.cardGoldAccent,
-                          borderRadius: BorderRadius.circular(6),
+                          color: AppColors.primaryLight,
+                          borderRadius: BorderRadius.circular(100),
                         ),
                         child: Text(
                           'NEW',
-                          style: AppTextStyles.caption.copyWith(
-                            color: const Color(0xFF11110F),
-                            fontSize: 10.5,
+                          style: GoogleFonts.inter(
+                            color: AppColors.primary,
+                            fontSize: 10,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.3,
                           ),
@@ -116,27 +109,27 @@ class SubscriberCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                     ],
-                    _buildStatusBadge(subscriber.status),
+                    StatusBadge(
+                      text: subscriber.status == SubscriberStatus.active
+                          ? 'ACTIVE'
+                          : 'PAUSED',
+                    ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
             // Divider Line
-            Container(
-              height: 1,
-              color: const Color(0xFF242426),
-            ),
+            const Divider(color: AppColors.border, height: 1),
             const SizedBox(height: 12),
 
             // Address
             Text(
               subscriber.address,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textPrimaryDark,
+                color: AppColors.textSecondary,
                 fontSize: 13,
-                fontWeight: FontWeight.w400,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -150,7 +143,7 @@ class SubscriberCard extends StatelessWidget {
                 Text(
                   'Subscription Since: ${subscriber.subscriptionSince}',
                   style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textMutedDark,
+                    color: AppColors.textMuted,
                     fontSize: 12,
                   ),
                 ),
@@ -158,8 +151,8 @@ class SubscriberCard extends StatelessWidget {
                   onTap: onViewHistory,
                   child: Text(
                     'View History',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.cardGoldAccent,
+                    style: GoogleFonts.inter(
+                      color: AppColors.primary,
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
                     ),
@@ -168,67 +161,6 @@ class SubscriberCard extends StatelessWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInitialsAvatar() {
-    final initials = subscriber.name.isNotEmpty
-        ? subscriber.name
-            .split(' ')
-            .map((e) => e.isNotEmpty ? e[0] : '')
-            .take(2)
-            .join()
-        : 'U';
-
-    return Center(
-      child: Text(
-        initials,
-        style: AppTextStyles.titleMedium.copyWith(
-          color: AppColors.creamText,
-          fontWeight: FontWeight.w700,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusBadge(SubscriberStatus status) {
-    if (status == SubscriberStatus.active) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0C1F15),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: const Color(0xFF00C853), width: 0.9),
-        ),
-        child: Text(
-          'ACTIVE',
-          style: AppTextStyles.caption.copyWith(
-            color: const Color(0xFF00E676),
-            fontSize: 10.5,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.3,
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E1E20),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: const Color(0xFF48484A), width: 0.9),
-      ),
-      child: Text(
-        'PAUSED',
-        style: AppTextStyles.caption.copyWith(
-          color: const Color(0xFF8E8E93),
-          fontSize: 10.5,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.3,
         ),
       ),
     );

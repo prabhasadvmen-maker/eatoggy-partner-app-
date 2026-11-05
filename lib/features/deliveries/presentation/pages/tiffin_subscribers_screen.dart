@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/tiffin_subscribers/tiffin_subscribers_bloc.dart';
 import '../../bloc/tiffin_subscribers/tiffin_subscribers_event.dart';
 import '../../bloc/tiffin_subscribers/tiffin_subscribers_state.dart';
 import '../widgets/subscriber_card.dart';
+import 'tiffin_delivery_detail_screen.dart';
 
 class TiffinSubscribersScreen extends StatelessWidget {
   final VoidCallback? onBack;
@@ -47,7 +50,7 @@ class TiffinSubscribersView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: AppColors.scaffoldBackground,
         body: SafeArea(
           child: BlocBuilder<TiffinSubscribersBloc, TiffinSubscribersState>(
             builder: (context, state) {
@@ -64,50 +67,54 @@ class TiffinSubscribersView extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (onBack != null) ...[
-                              GestureDetector(
-                                onTap: onBack,
-                                behavior: HitTestBehavior.opaque,
-                                child: Container(
-                                  width: 38,
-                                  height: 38,
-                                  margin: const EdgeInsets.only(right: 12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF1B1B1D),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFF2C2C2E),
-                                      width: 0.8,
-                                    ),
+                            GestureDetector(
+                              onTap: () {
+                                if (onBack != null) {
+                                  onBack!();
+                                } else if (Navigator.canPop(context)) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                width: 38,
+                                height: 38,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.border,
+                                    width: 1.0,
                                   ),
-                                  child: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    color: AppColors.creamText,
-                                    size: 16,
-                                  ),
+                                  boxShadow: AppShadows.card,
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  color: AppColors.textPrimary,
+                                  size: 16,
                                 ),
                               ),
-                            ],
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Tiffin Subscribers',
-                                    style: AppTextStyles.displayLarge.copyWith(
-                                      color: AppColors.creamText,
-                                      fontSize: 24,
+                                    style: GoogleFonts.fraunces(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: -0.3,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 2),
                                   Text(
                                     'Manage your recurring customers',
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.textMutedDark,
-                                      fontSize: 13.5,
-                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.textSecondary,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ],
@@ -115,20 +122,21 @@ class TiffinSubscribersView extends StatelessWidget {
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 11,
-                                vertical: 6,
+                                horizontal: 10,
+                                vertical: 5,
                               ),
                               decoration: BoxDecoration(
+                                color: AppColors.primaryLight,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: AppColors.cardGoldAccent,
-                                  width: 0.9,
+                                  color: AppColors.primary.withValues(alpha: 0.3),
+                                  width: 1.0,
                                 ),
                               ),
                               child: Text(
                                 '${state.totalCount} TOTAL',
-                                style: AppTextStyles.caption.copyWith(
-                                  color: AppColors.cardGoldAccent,
+                                style: GoogleFonts.inter(
+                                  color: AppColors.primary,
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: 0.4,
@@ -137,7 +145,7 @@ class TiffinSubscribersView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 16),
 
                         // Horizontal Filter Chips Row
                         SingleChildScrollView(
@@ -148,7 +156,7 @@ class TiffinSubscribersView extends StatelessWidget {
                               final isSelected = state.selectedFilter == filter;
 
                               return Padding(
-                                padding: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.only(right: 8),
                                 child: GestureDetector(
                                   onTap: () {
                                     context.read<TiffinSubscribersBloc>().add(
@@ -157,31 +165,31 @@ class TiffinSubscribersView extends StatelessWidget {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 18,
-                                      vertical: 9,
+                                      horizontal: 16,
+                                      vertical: 8,
                                     ),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? AppColors.cardGoldAccent
-                                          : const Color(0xFF1B1B1D),
+                                          ? AppColors.primary
+                                          : AppColors.surface,
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
                                         color: isSelected
-                                            ? AppColors.cardGoldAccent
-                                            : const Color(0xFF2C2C2E),
-                                        width: 0.8,
+                                            ? AppColors.primary
+                                            : AppColors.border,
+                                        width: 1.0,
                                       ),
                                     ),
                                     child: Text(
                                       filter,
-                                      style: AppTextStyles.caption.copyWith(
+                                      style: TextStyle(
                                         color: isSelected
-                                            ? const Color(0xFF11110F)
-                                            : AppColors.textPrimaryDark,
+                                            ? Colors.white
+                                            : AppColors.textSecondary,
                                         fontWeight: isSelected
-                                            ? FontWeight.w800
+                                            ? FontWeight.w700
                                             : FontWeight.w500,
-                                        fontSize: 13,
+                                        fontSize: 12.5,
                                       ),
                                     ),
                                   ),
@@ -190,7 +198,7 @@ class TiffinSubscribersView extends StatelessWidget {
                             }).toList(),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                       ],
                     ),
                   ),
@@ -205,8 +213,28 @@ class TiffinSubscribersView extends StatelessWidget {
                         final subscriber = state.filteredSubscribers[index];
                         return SubscriberCard(
                           subscriber: subscriber,
-                          onTap: () {},
-                          onViewHistory: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => TiffinDeliveryDetailScreen(
+                                  customerName: subscriber.name,
+                                  address: subscriber.address,
+                                ),
+                              ),
+                            );
+                          },
+                          onViewHistory: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => TiffinDeliveryDetailScreen(
+                                  customerName: subscriber.name,
+                                  address: subscriber.address,
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

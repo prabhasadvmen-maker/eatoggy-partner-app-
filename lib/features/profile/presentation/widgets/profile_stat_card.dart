@@ -5,13 +5,13 @@ import '../../../../core/theme/app_colors.dart';
 class ProfileStatCard extends StatelessWidget {
   final String label;
   final String value;
-  final bool isGoldValue;
+  final bool isHighlightValue;
 
   const ProfileStatCard({
     super.key,
     required this.label,
     required this.value,
-    this.isGoldValue = false,
+    this.isHighlightValue = false,
   });
 
   @override
@@ -20,12 +20,19 @@ class ProfileStatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1C),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: const Color(0xFF262628),
+            color: AppColors.border,
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -33,9 +40,9 @@ class ProfileStatCard extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(
-                color: const Color(0xFF8E8E93),
-                fontSize: 12.5,
+              style: GoogleFonts.geist(
+                color: AppColors.textSecondary,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),
               maxLines: 1,
@@ -46,11 +53,9 @@ class ProfileStatCard extends StatelessWidget {
               value,
               textAlign: TextAlign.center,
               style: GoogleFonts.fraunces(
-                color: isGoldValue
-                    ? AppColors.cardGoldAccent
-                    : AppColors.creamText,
-                fontSize: 16.5,
-                fontWeight: FontWeight.w700,
+                color: isHighlightValue ? AppColors.primary : AppColors.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 letterSpacing: -0.2,
               ),
               maxLines: 1,

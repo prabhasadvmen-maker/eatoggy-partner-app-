@@ -21,12 +21,19 @@ class SettingToggleCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFF262628),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,8 +41,8 @@ class SettingToggleCard extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: GoogleFonts.inter(
-                color: Colors.white,
+              style: GoogleFonts.geist(
+                color: AppColors.textPrimary,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -0.1,
@@ -44,32 +51,37 @@ class SettingToggleCard extends StatelessWidget {
           ),
           const SizedBox(width: 14),
 
-          // Custom Gold Toggle Switch matching screenshot
+          // Custom Crimson Toggle Switch matching d18-settings.svg
           GestureDetector(
             onTap: () => onChanged(!value),
             behavior: HitTestBehavior.opaque,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.easeInOut,
-              width: 52,
-              height: 30,
-              padding: const EdgeInsets.all(3.5),
+              width: 46,
+              height: 26,
+              padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: value ? AppColors.cardGoldAccent : const Color(0xFF222226),
-                borderRadius: BorderRadius.circular(20),
+                color: value ? AppColors.primary : const Color(0xFFE7E5E4),
+                borderRadius: BorderRadius.circular(14),
               ),
               child: AnimatedAlign(
-                duration: const Duration(milliseconds: 220),
+                duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
                 alignment: value ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
-                  width: 23,
-                  height: 23,
-                  decoration: BoxDecoration(
-                    color: value
-                        ? const Color(0xFF141416)
-                        : const Color(0xFF18181A),
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
                   ),
                 ),
               ),

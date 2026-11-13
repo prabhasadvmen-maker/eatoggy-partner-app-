@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class SettingsLegalCard extends StatelessWidget {
   final VoidCallback onPrivacyTap;
@@ -18,12 +19,19 @@ class SettingsLegalCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF262628),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -31,12 +39,12 @@ class SettingsLegalCard extends StatelessWidget {
             title: 'Privacy Suite Policy',
             onTap: onPrivacyTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
           _buildItem(
             title: 'Terms of Logistics Service',
             onTap: onTermsTap,
           ),
-          const Divider(height: 1, thickness: 1, color: Color(0xFF242426)),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
           _buildItem(
             title: 'About Eatoggy Premium',
             onTap: onAboutTap,
@@ -60,8 +68,8 @@ class SettingsLegalCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.inter(
-                color: Colors.white,
+              style: GoogleFonts.geist(
+                color: AppColors.textPrimary,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -0.1,
@@ -69,7 +77,7 @@ class SettingsLegalCard extends StatelessWidget {
             ),
             const Icon(
               Icons.chevron_right_rounded,
-              color: Color(0xFF8E8E93),
+              color: AppColors.textSecondary,
               size: 22,
             ),
           ],

@@ -155,3 +155,139 @@ class QuantitySelector extends StatelessWidget {
     );
   }
 }
+
+class StatusBadge extends StatelessWidget {
+  final String text;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final IconData? icon;
+
+  const StatusBadge({
+    super.key,
+    required this.text,
+    this.backgroundColor,
+    this.textColor,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color bg = backgroundColor ?? AppColors.primaryLight;
+    Color fg = textColor ?? AppColors.primary;
+
+    final lower = text.toLowerCase();
+    if (lower.contains('delivered') ||
+        lower.contains('online') ||
+        lower.contains('active') ||
+        lower.contains('success')) {
+      bg = backgroundColor ?? AppColors.successLight;
+      fg = textColor ?? AppColors.successText;
+    } else if (lower.contains('pending') ||
+        lower.contains('wait') ||
+        lower.contains('paused')) {
+      bg = backgroundColor ?? AppColors.warningBadgeBg;
+      fg = textColor ?? AppColors.warning;
+    } else if (lower.contains('rejected') ||
+        lower.contains('failed') ||
+        lower.contains('offline')) {
+      bg = backgroundColor ?? AppColors.errorLight;
+      fg = textColor ?? AppColors.error;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 13, color: fg),
+            const SizedBox(width: 4),
+          ],
+          Text(
+            text.toUpperCase(),
+            style: AppTextStyles.label.copyWith(
+              color: fg,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AppCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final Color? backgroundColor;
+  final BorderSide? borderSide;
+  final VoidCallback? onTap;
+
+  const AppCard({
+    super.key,
+    required this.child,
+    this.padding,
+    this.backgroundColor,
+    this.borderSide,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final effectivePadding = padding ?? const EdgeInsets.all(16);
+    final effectiveBg = backgroundColor ?? AppColors.card;
+    final effectiveBorder = borderSide ??
+        const BorderSide(color: AppColors.border, width: 1.0);
+
+    final cardContent = Container(
+      padding: effectivePadding,
+      decoration: BoxDecoration(
+        color: effectiveBg,
+        borderRadius: AppRadius.borderLg,
+        border: Border.fromBorderSide(effectiveBorder),
+        boxShadow: AppShadows.card,
+      ),
+      child: child,
+    );
+
+    if (onTap != null) {
+      return InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.borderLg,
+        child: cardContent,
+      );
+    }
+    return cardContent;
+  }
+}
+
+class StepIndicator extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const StepIndicator({
+    super.key,
+    required this.currentStep,
+    this.totalSteps = 3,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'STEP $currentStep OF $totalSteps',
+      style: AppTextStyles.label.copyWith(
+        color: AppColors.primary,
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.2,
+      ),
+    );
+  }
+}
+

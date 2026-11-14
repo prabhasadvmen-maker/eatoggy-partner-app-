@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/widgets/common_widgets.dart';
 import '../bloc/bank_details_bloc.dart';
 
 class BankDetailsScreen extends StatelessWidget {
@@ -64,10 +66,8 @@ class _BankDetailsViewState extends State<BankDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    const borderColor = AppColors.darkBorder;
-    // const inputBgColor = AppColors.darkSurface;
+    const bgColor = AppColors.background;
+    const borderColor = AppColors.border;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -79,31 +79,27 @@ class _BankDetailsViewState extends State<BankDetailsView> {
             }
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 1.h),
 
                 // STEP 2 OF 3
-                Text(
-                  'STEP 2 OF 3',
-                  style: AppTextStyles.label,
-                ),
-                SizedBox(height: 1.h),
+                const StepIndicator(currentStep: 2, totalSteps: 3),
+                SizedBox(height: 1.2.h),
 
                 // Add bank account
                 Text(
                   'Add bank account',
                   style: AppTextStyles.displayLarge,
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 1.2.h),
 
                 // Subtitle
                 Text(
                   'Add the account where you would like to receive your partner payouts.',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
                     height: 1.4,
                   ),
                 ),
@@ -123,7 +119,6 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                       errorText: state.nameError,
                       onChanged: (val) => context.read<BankDetailsBloc>().add(AccountHolderNameChanged(val)),
                       borderColor: borderColor,
-                      // inputBgColor: inputBgColor,
                     );
                   },
                 ),
@@ -142,14 +137,12 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                       icon: Icons.account_balance_wallet_outlined,
                       errorText: state.accountNumberError,
                       keyboardType: TextInputType.number,
-                      //  obscureText:
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(18),
                       ],
                       onChanged: (val) => context.read<BankDetailsBloc>().add(AccountNumberChanged(val)),
                       borderColor: borderColor,
-                      // inputBgColor: inputBgColor,
                     );
                   },
                 ),
@@ -174,7 +167,6 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                       ],
                       onChanged: (val) => context.read<BankDetailsBloc>().add(ConfirmAccountNumberChanged(val)),
                       borderColor: borderColor,
-                      // inputBgColor: inputBgColor,
                     );
                   },
                 ),
@@ -198,7 +190,6 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                       ],
                       onChanged: (val) => context.read<BankDetailsBloc>().add(IfscCodeChanged(val)),
                       borderColor: borderColor,
-                      // inputBgColor: inputBgColor,
                     );
                   },
                 ),
@@ -210,19 +201,19 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4.w),
                   decoration: BoxDecoration(
-                    color: goldColor.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(14),
+                    color: AppColors.surfaceSubtle,
+                    borderRadius: AppRadius.borderLg,
                     border: Border.all(
-                      color: goldColor.withValues(alpha: 0.15),
+                      color: AppColors.border,
                     ),
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 38,
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withValues(alpha: 0.15),
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: AppColors.successLight,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -239,17 +230,13 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                             Text(
                               'Instant bank verification',
                               style: AppTextStyles.titleMedium.copyWith(
-                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               "We'll deposit ₹1 to verify your account details.",
-                              style: AppTextStyles.caption.copyWith(
-                                color: Colors.white60,
-                                fontSize: 12.sp,
-                              ),
+                              style: AppTextStyles.caption,
                             ),
                           ],
                         ),
@@ -258,7 +245,7 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                   ),
                 ),
 
-                SizedBox(height: 4.h),
+                SizedBox(height: 3.5.h),
 
                 // Security Note
                 Center(
@@ -273,59 +260,47 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                       const SizedBox(width: 8),
                       Text(
                         'Your banking details are safe and never shared',
-                        style: AppTextStyles.caption.copyWith(
-                          color: Colors.white54,
-                          fontSize: 12.sp,
-                        ),
+                        style: AppTextStyles.caption,
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 2.h),
+                SizedBox(height: 2.5.h),
 
-                // Verify & Continue Button
+                // Verify & Continue Button (Solid Crimson Red)
                 BlocBuilder<BankDetailsBloc, BankDetailsState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              context.read<BankDetailsBloc>().add(const BankDetailsSubmitted());
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.buttonHeight,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                context.read<BankDetailsBloc>().add(const BankDetailsSubmitted());
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.textLight,
+                          elevation: 0,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Verify & Continue',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Verify & Continue',
+                                style: AppTextStyles.button,
+                              ),
                       ),
                     );
                   },
@@ -358,7 +333,6 @@ class _BankDetailsViewState extends State<BankDetailsView> {
     List<TextInputFormatter>? inputFormatters,
     required ValueChanged<String> onChanged,
     required Color borderColor,
-    // required Color inputBgColor,
   }) {
     final hasError = errorText != null;
     return Column(
@@ -366,11 +340,13 @@ class _BankDetailsViewState extends State<BankDetailsView> {
       children: [
         Container(
           decoration: BoxDecoration(
-            // color: inputBgColor,
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.surface,
+            borderRadius: AppRadius.borderLg,
             border: Border.all(
               color: hasError ? AppColors.error : borderColor,
+              width: 1.2,
             ),
+            boxShadow: AppShadows.card,
           ),
           child: Row(
             children: [
@@ -378,7 +354,7 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Icon(
                   icon,
-                  color: AppColors.goldFont.withValues(alpha: 0.7),
+                  color: AppColors.textSecondary,
                   size: 22,
                 ),
               ),
@@ -390,10 +366,10 @@ class _BankDetailsViewState extends State<BankDetailsView> {
                   textCapitalization: textCapitalization,
                   inputFormatters: inputFormatters,
                   onChanged: onChanged,
-                  style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
                   decoration: InputDecoration(
                     hintText: hintText,
-                    hintStyle: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+                    hintStyle: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPlaceholder),
                     fillColor: Colors.transparent,
                     filled: false,
                     border: InputBorder.none,

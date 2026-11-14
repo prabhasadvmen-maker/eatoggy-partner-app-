@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../bloc/active_navigation/active_navigation_bloc.dart';
 import '../../bloc/active_navigation/active_navigation_event.dart';
 import '../../bloc/active_navigation/active_navigation_state.dart';
@@ -34,7 +35,7 @@ class ActiveNavigationView extends StatelessWidget {
     return PopScope(
       canPop: true,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0D0D0E),
+        backgroundColor: AppColors.scaffoldBackground,
         body: BlocConsumer<ActiveNavigationBloc, ActiveNavigationState>(
           listener: (context, state) {
             if (state.message != null) {
@@ -51,39 +52,14 @@ class ActiveNavigationView extends StatelessWidget {
 
             return Stack(
               children: [
-                // 1. Luxury Dark-Gold Geometric Map Background
+                // 1. Luxury Light Map Background
                 Positioned.fill(
                   child: CustomPaint(
                     painter: LuxuryMapPainter(),
                   ),
                 ),
 
-                // 2. Watermark overlay text at bottom center matching screenshot
-                Positioned(
-                  bottom: 145,
-                  left: 18,
-                  child: Row(
-                    children: [
-                      Text(
-                        'CITY XPLORER',
-                        style: TextStyle(
-                          color: const Color(0xFF5A4A28).withValues(alpha: 0.4),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 2.0,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Icon(
-                        Icons.search_rounded,
-                        color: const Color(0xFF5A4A28).withValues(alpha: 0.4),
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-
-                // 3. Top Floating ETA & Direction Card
+                // 2. Top Floating ETA & Direction Card
                 Positioned(
                   top: 0,
                   left: 16,
@@ -101,7 +77,7 @@ class ActiveNavigationView extends StatelessWidget {
                   ),
                 ),
 
-                // 4. Bottom Delivery Destination Sheet
+                // 3. Bottom Delivery Destination Sheet
                 Positioned(
                   bottom: 0,
                   left: 0,

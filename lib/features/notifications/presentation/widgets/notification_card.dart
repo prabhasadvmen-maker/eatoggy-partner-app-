@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../data/models/notification_model.dart';
 
 class NotificationCard extends StatelessWidget {
@@ -15,38 +15,45 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconData = _getIconForType(notification.type);
+    final iconColor = _getIconColorForType(notification.type);
+    final iconBgColor = _getIconBgColorForType(notification.type);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF171719),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFF262628),
-            width: 0.8,
+            color: AppColors.border,
+            width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Left Icon Container
             Container(
-              width: 44,
-              height: 44,
+              width: 42,
+              height: 42,
               decoration: BoxDecoration(
-                color: const Color(0xFF1F1D1A),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: const Color(0xFF2F2922),
-                  width: 0.8,
-                ),
+                color: iconBgColor,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
-                _getIconForType(notification.type),
-                color: _getIconColorForType(notification.type),
-                size: 22,
+                iconData,
+                color: iconColor,
+                size: 20,
               ),
             ),
             const SizedBox(width: 14),
@@ -61,10 +68,10 @@ class NotificationCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           notification.title,
-                          style: AppTextStyles.titleMedium.copyWith(
-                            color: AppColors.textPrimaryDark,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15.5,
+                          style: GoogleFonts.fraunces(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
                           ),
                         ),
                       ),
@@ -74,7 +81,7 @@ class NotificationCard extends StatelessWidget {
                           width: 8,
                           height: 8,
                           decoration: const BoxDecoration(
-                            color: AppColors.cardGoldAccent,
+                            color: AppColors.primary,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -84,9 +91,9 @@ class NotificationCard extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     notification.description,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textMutedDark,
-                      fontSize: 13.5,
+                    style: GoogleFonts.geist(
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
                       height: 1.35,
                     ),
@@ -94,9 +101,10 @@ class NotificationCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     notification.timeAgo,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textMutedDark.withValues(alpha: 0.8),
-                      fontSize: 12,
+                    style: GoogleFonts.geist(
+                      color: AppColors.textMuted,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -124,11 +132,26 @@ class NotificationCard extends StatelessWidget {
   Color _getIconColorForType(NotificationType type) {
     switch (type) {
       case NotificationType.assignment:
+        return AppColors.primary;
       case NotificationType.support:
-        return AppColors.cardGoldAccent;
+        return const Color(0xFF2563EB); // Royal Blue
       case NotificationType.alert:
+        return const Color(0xFFD97706); // Amber
       case NotificationType.payout:
-        return AppColors.textMutedDark;
+        return const Color(0xFF16A34A); // Emerald
+    }
+  }
+
+  Color _getIconBgColorForType(NotificationType type) {
+    switch (type) {
+      case NotificationType.assignment:
+        return const Color(0xFFFFF1F2); // Rose light
+      case NotificationType.support:
+        return const Color(0xFFEFF6FF); // Blue light
+      case NotificationType.alert:
+        return const Color(0xFFFEF3C7); // Amber light
+      case NotificationType.payout:
+        return const Color(0xFFDCFCE7); // Green light
     }
   }
 }

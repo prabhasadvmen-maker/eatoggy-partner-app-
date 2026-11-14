@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../bloc/register_bloc.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -84,10 +85,9 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    const borderColor = AppColors.darkBorder;
-    const inputBgColor = AppColors.darkSurface;
+    const bgColor = AppColors.background;
+    const borderColor = AppColors.border;
+    const inputBgColor = AppColors.surface;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -99,7 +99,7 @@ class _RegisterViewState extends State<RegisterView> {
             }
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -111,45 +111,39 @@ class _RegisterViewState extends State<RegisterView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: 10,
-                        height: 10,
+                        width: 8,
+                        height: 8,
                         decoration: const BoxDecoration(
-                          color: goldColor,
+                          color: AppColors.primary,
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor,
-                              blurRadius: 6,
-                              spreadRadius: 1,
-                            )
-                          ],
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         'EATOGGY LOGISTICS',
-                        style: AppTextStyles.label,
+                        style: AppTextStyles.label.copyWith(
+                          color: AppColors.primary,
+                          letterSpacing: 1.4,
+                        ),
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 2.5.h),
+                SizedBox(height: 2.h),
 
-                // Title & Subtitle
+                // Title & Subtitle matching d01b-register.svg
                 Text(
                   'Join EATOGGY Partners',
                   style: AppTextStyles.headingLarge,
                 ),
-                SizedBox(height: 0.5.h),
+                SizedBox(height: 0.6.h),
                 Text(
                   'Register as a Delivery Partner',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
-                  ),
+                  style: AppTextStyles.bodyMedium,
                 ),
 
-                SizedBox(height: 2.h),
+                SizedBox(height: 3.h),
 
                 // FULL NAME
                 _buildLabel('FULL NAME'),
@@ -203,10 +197,12 @@ class _RegisterViewState extends State<RegisterView> {
                         Container(
                           decoration: BoxDecoration(
                             color: inputBgColor,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: AppRadius.borderLg,
                             border: Border.all(
                               color: hasError ? AppColors.error : borderColor,
+                              width: 1.2,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           child: Row(
                             children: [
@@ -215,11 +211,10 @@ class _RegisterViewState extends State<RegisterView> {
                                 child: Row(
                                   children: [
                                     const Text('🇮🇳', style: TextStyle(fontSize: 18)),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: 8),
                                     Text(
                                       '+91',
                                       style: AppTextStyles.bodyLarge.copyWith(
-                                        color: Colors.white,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -241,10 +236,10 @@ class _RegisterViewState extends State<RegisterView> {
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   onChanged: (val) => context.read<RegisterBloc>().add(RegisterPhoneChanged(val)),
-                                  style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                     hintText: '98765 43210',
-                                    hintStyle: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+                                    hintStyle: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPlaceholder),
                                     fillColor: Colors.transparent,
                                     filled: false,
                                     border: InputBorder.none,
@@ -338,19 +333,21 @@ class _RegisterViewState extends State<RegisterView> {
                         Container(
                           decoration: BoxDecoration(
                             color: inputBgColor,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: AppRadius.borderLg,
                             border: Border.all(
                               color: hasError ? AppColors.error : borderColor,
+                              width: 1.2,
                             ),
+                            boxShadow: AppShadows.card,
                           ),
                           child: TextField(
                             controller: _passwordController,
                             obscureText: state.obscurePassword,
                             onChanged: (val) => context.read<RegisterBloc>().add(RegisterPasswordChanged(val)),
-                            style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                            style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
                             decoration: InputDecoration(
                               hintText: 'Create secure password',
-                              hintStyle: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+                              hintStyle: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPlaceholder),
                               fillColor: Colors.transparent,
                               filled: false,
                               border: InputBorder.none,
@@ -363,7 +360,7 @@ class _RegisterViewState extends State<RegisterView> {
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   state.obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                                  color: Colors.white54,
+                                  color: AppColors.textSecondary,
                                 ),
                                 onPressed: () {
                                   context.read<RegisterBloc>().add(const RegisterTogglePasswordVisibility());
@@ -387,56 +384,47 @@ class _RegisterViewState extends State<RegisterView> {
                   },
                 ),
 
-                SizedBox(height: 3.h),
+                SizedBox(height: 3.5.h),
 
-                // CREATE ACCOUNT BUTTON
+                // CREATE ACCOUNT BUTTON (Solid Crimson Red)
                 BlocBuilder<RegisterBloc, RegisterState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              context.read<RegisterBloc>().add(const RegisterSubmitted());
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.buttonHeight,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                context.read<RegisterBloc>().add(const RegisterSubmitted());
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.textLight,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Create Account',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Create Account',
+                                style: AppTextStyles.button,
+                              ),
                       ),
                     );
                   },
                 ),
 
-                SizedBox(height: 2.h),
+                SizedBox(height: 2.5.h),
 
                 // Already have an account? Login
                 Center(
@@ -445,14 +433,14 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       Text(
                         'Already have an account? ',
-                        style: AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
+                        style: AppTextStyles.bodyMedium,
                       ),
                       GestureDetector(
                         onTap: widget.onLoginTap,
                         child: Text(
                           'Login',
                           style: AppTextStyles.bodyMedium.copyWith(
-                            color: goldColor,
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -493,19 +481,21 @@ class _RegisterViewState extends State<RegisterView> {
         Container(
           decoration: BoxDecoration(
             color: inputBgColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.borderLg,
             border: Border.all(
               color: hasError ? AppColors.error : borderColor,
+              width: 1.2,
             ),
+            boxShadow: AppShadows.card,
           ),
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
             onChanged: onChanged,
-            style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+            style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+              hintStyle: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPlaceholder),
               fillColor: Colors.transparent,
               filled: false,
               border: InputBorder.none,
@@ -549,27 +539,29 @@ class _RegisterViewState extends State<RegisterView> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: inputBgColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.borderLg,
             border: Border.all(
               color: hasError ? AppColors.error : borderColor,
+              width: 1.2,
             ),
+            boxShadow: AppShadows.card,
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
               hint: Text(
                 hintText,
-                style: AppTextStyles.bodyLarge.copyWith(color: Colors.white38),
+                style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPlaceholder),
               ),
               isExpanded: true,
               dropdownColor: inputBgColor,
-              icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.goldFont),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textSecondary),
               items: items.map((item) {
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Text(
                     item,
-                    style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                    style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
                   ),
                 );
               }).toList(),

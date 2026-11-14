@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../bloc/profile_bloc.dart';
 import '../../bloc/profile_event.dart';
@@ -30,9 +32,6 @@ class ProfileView extends StatelessWidget {
 
   const ProfileView({super.key, required this.onLogout});
 
-  static const Color _screenBg = Color(0xFF111111);
-  static const Color _goldColor = Color(0xFFE5A64E);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
@@ -57,41 +56,43 @@ class ProfileView extends StatelessWidget {
         final profile = state.profile;
 
         return Scaffold(
-          backgroundColor: _screenBg,
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 12),
+          backgroundColor: AppColors.scaffoldBackground,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 8),
 
-                // Top Profile Avatar with Gold Border
-                Center(
-                  child: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: _goldColor,
-                        width: 2.2,
+                  // Top Profile Avatar with Crimson Border (d16-profile.svg)
+                  Center(
+                    child: Container(
+                      width: 98,
+                      height: 98,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 2.2,
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.all(2.5),
-                    child: ClipOval(
-                      child: Image.asset(
-                        profile.avatarPath,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: const Color(0xFF707C54),
-                          child: Center(
-                            child: Text(
-                              profile.name.isNotEmpty ? profile.name[0] : 'K',
-                              style: GoogleFonts.fraunces(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
+                      padding: const EdgeInsets.all(3),
+                      child: ClipOval(
+                        child: Image.asset(
+                          profile.avatarPath,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            color: const Color(0xFFFEE2E2),
+                            child: Center(
+                              child: Text(
+                                profile.name.isNotEmpty ? profile.name[0] : 'K',
+                                style: GoogleFonts.fraunces(
+                                  color: AppColors.primary,
+                                  fontSize: 38,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -99,158 +100,162 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
-                // Partner Name (Fraunces Warm Cream Serif)
-                Text(
-                  profile.name,
-                  style: GoogleFonts.fraunces(
-                    color: AppColors.creamText,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-                const SizedBox(height: 4),
-
-                // Partner ID (Muted Grey Sans-serif)
-                Text(
-                  'Partner ID: ${profile.partnerId}',
-                  style: GoogleFonts.inter(
-                    color: const Color(0xFF8E8E93),
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // "VERIFIED PARTNER" Gold Outlined Pill Badge
-                if (profile.isVerified)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _goldColor,
-                        width: 1.2,
-                      ),
-                    ),
-                    child: Text(
-                      'VERIFIED PARTNER',
-                      style: GoogleFonts.inter(
-                        color: _goldColor,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                      ),
+                  // Partner Name (Fraunces Deep Stone Serif)
+                  Text(
+                    profile.name,
+                    style: GoogleFonts.fraunces(
+                      color: AppColors.textPrimary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
                     ),
                   ),
-                const SizedBox(height: 22),
+                  const SizedBox(height: 4),
 
-                // Stats Row: Rating, Deliveries, Member Since
-                Row(
-                  children: [
-                    ProfileStatCard(
-                      label: 'Rating',
-                      value: profile.rating,
-                      isGoldValue: true,
+                  // Partner ID
+                  Text(
+                    'Partner ID: ${profile.partnerId}',
+                    style: GoogleFonts.geist(
+                      color: AppColors.textSecondary,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w400,
                     ),
-                    const SizedBox(width: 10),
-                    ProfileStatCard(
-                      label: 'Deliveries',
-                      value: profile.totalDeliveries,
-                    ),
-                    const SizedBox(width: 10),
-                    ProfileStatCard(
-                      label: 'Member Since',
-                      value: profile.memberSince,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 10),
 
-                // Partner Details Card (Phone, Vehicle, Preferred Zone)
-                ProfileDetailsCard(
-                  phoneNumber: profile.phoneNumber,
-                  vehicleDetails: profile.vehicleDetails,
-                  preferredZone: profile.preferredZone,
-                ),
-                const SizedBox(height: 18),
-
-                // "Edit Profile" Primary Gold CTA Button
-                GestureDetector(
-                  onTap: () {
-                    context
-                        .read<ProfileBloc>()
-                        .add(const EditProfileTappedEvent());
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Edit Profile coming soon!'),
-                        duration: Duration(seconds: 2),
+                  // "VERIFIED PARTNER" Rose Outlined Pill Badge
+                  if (profile.isVerified)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 5,
                       ),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: _goldColor,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _goldColor.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFE4E8),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: const Color(0xFFFECACA),
+                          width: 1,
                         ),
-                      ],
-                    ),
-                    child: Center(
+                      ),
                       child: Text(
-                        'Edit Profile',
-                        style: GoogleFonts.inter(
-                          color: const Color(0xFF161106),
-                          fontSize: 16,
+                        'VERIFIED PARTNER',
+                        style: GoogleFonts.geist(
+                          color: AppColors.primary,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 0.1,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 22),
+
+                  // Stats Row: Rating, Deliveries, Member Since (Tap to open Scorecard)
+                  GestureDetector(
+                    onTap: () => context.push(AppRoutes.performanceScorecard),
+                    child: Container(
+                      decoration: const BoxDecoration(),
+                      child: Row(
+                        children: [
+                          ProfileStatCard(
+                            label: 'Rating',
+                            value: '${profile.rating} ★',
+                            isHighlightValue: true,
+                          ),
+                          const SizedBox(width: 10),
+                          ProfileStatCard(
+                            label: 'Deliveries',
+                            value: '${profile.totalDeliveries} Total',
+                          ),
+                          const SizedBox(width: 10),
+                          ProfileStatCard(
+                            label: 'Member Since',
+                            value: profile.memberSince,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Partner Details Card (Phone, Vehicle, Preferred Zone)
+                  ProfileDetailsCard(
+                    phoneNumber: profile.phoneNumber,
+                    vehicleDetails: profile.vehicleDetails,
+                    preferredZone: profile.preferredZone,
+                  ),
+                  const SizedBox(height: 18),
+
+                  // "Edit Profile" Primary Crimson CTA Button
+                  GestureDetector(
+                    onTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(const EditProfileTappedEvent());
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Edit Profile coming soon!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.25),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Edit Profile',
+                          style: GoogleFonts.geist(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.1,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 18),
+                  const SizedBox(height: 18),
 
-                // Settings & Options Menu Card (Support, Settings, Emergency, About, Logout)
-                ProfileMenuCard(
-                  onSupportTap: () {
-                    context
-                        .read<ProfileBloc>()
-                        .add(const ToggleSupportViewEvent(true));
-                  },
-                  onSettingsTap: () {
-                    context
-                        .read<ProfileBloc>()
-                        .add(const ToggleSettingsViewEvent(true));
-                  },
-                  onEmergencyTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Emergency Reporting coming soon!')),
-                    );
-                  },
-                  onAboutTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('About EATOGGY v1.0.0')),
-                    );
-                  },
-                  onLogoutTap: () => _showLogoutConfirmation(context),
-                ),
-                const SizedBox(height: 24),
-              ],
+                  // Settings & Options Menu Card (Support, Settings, Scorecard, Emergency, About, Logout)
+                  ProfileMenuCard(
+                    onSupportTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(const ToggleSupportViewEvent(true));
+                    },
+                    onSettingsTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(const ToggleSettingsViewEvent(true));
+                    },
+                    onPerformanceTap: () =>
+                        context.push(AppRoutes.performanceScorecard),
+                    onEmergencyTap: () =>
+                        context.push(AppRoutes.sosEmergency),
+                    onAboutTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('About EATOGGY v1.0.0')),
+                      );
+                    },
+                    onLogoutTap: () => _showLogoutConfirmation(context),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         );
@@ -262,23 +267,23 @@ class ProfileView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A1C),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: Color(0xFF262628)),
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.border),
         ),
         title: Text(
           'Logout',
           style: GoogleFonts.fraunces(
-            color: AppColors.creamText,
+            color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
         ),
         content: Text(
           'Are you sure you want to log out of your partner account?',
-          style: GoogleFonts.inter(
-            color: const Color(0xFF8E8E93),
+          style: GoogleFonts.geist(
+            color: AppColors.textSecondary,
             fontSize: 14,
           ),
         ),
@@ -287,15 +292,15 @@ class ProfileView extends StatelessWidget {
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               'Cancel',
-              style: GoogleFonts.inter(
-                color: const Color(0xFF8E8E93),
+              style: GoogleFonts.geist(
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE54D4D),
+              backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -306,9 +311,9 @@ class ProfileView extends StatelessWidget {
             },
             child: Text(
               'Logout',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.geist(
                 color: Colors.white,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

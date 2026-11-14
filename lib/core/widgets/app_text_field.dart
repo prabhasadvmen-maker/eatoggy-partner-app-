@@ -38,8 +38,15 @@ class AppTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (labelText != null) ...[
-          Text(labelText!, style: AppTextStyles.titleMedium),
-          const SizedBox(height: 6),
+          Text(
+            labelText!.toUpperCase(),
+            style: AppTextStyles.label.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 8),
         ],
         TextFormField(
           controller: controller,

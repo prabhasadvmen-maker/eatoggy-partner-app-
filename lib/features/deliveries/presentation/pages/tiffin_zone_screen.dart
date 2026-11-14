@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../bloc/tiffin_zone/tiffin_zone_bloc.dart';
 import '../../bloc/tiffin_zone/tiffin_zone_event.dart';
 import '../../bloc/tiffin_zone/tiffin_zone_state.dart';
 import '../widgets/tiffin_route_card.dart';
 import '../widgets/zone_radar_card.dart';
+import 'tiffin_delivery_detail_screen.dart';
 
 class TiffinZoneScreen extends StatelessWidget {
   final VoidCallback? onBack;
@@ -41,24 +45,25 @@ class TiffinZoneView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: AppColors.scaffoldBackground,
         body: SafeArea(
           child: BlocConsumer<TiffinZoneBloc, TiffinZoneState>(
             listener: (context, state) {
               if (state.statusMessage != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    backgroundColor: const Color(0xFF1E1E20),
+                    backgroundColor: AppColors.surface,
                     content: Text(
                       state.statusMessage!,
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.cardGoldAccent,
+                      style: GoogleFonts.inter(
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: AppRadius.borderMd,
+                      side: const BorderSide(color: AppColors.border),
                     ),
                   ),
                 );
@@ -69,7 +74,7 @@ class TiffinZoneView extends StatelessWidget {
               if (zone == null) {
                 return const Center(
                   child: CircularProgressIndicator(
-                    color: AppColors.cardGoldAccent,
+                    color: AppColors.primary,
                   ),
                 );
               }
@@ -88,50 +93,54 @@ class TiffinZoneView extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              if (onBack != null) ...[
-                                GestureDetector(
-                                  onTap: onBack,
-                                  behavior: HitTestBehavior.opaque,
-                                  child: Container(
-                                    width: 38,
-                                    height: 38,
-                                    margin: const EdgeInsets.only(right: 12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF1B1B1D),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: const Color(0xFF2C2C2E),
-                                        width: 0.8,
-                                      ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (onBack != null) {
+                                    onBack!();
+                                  } else if (Navigator.canPop(context)) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                behavior: HitTestBehavior.opaque,
+                                child: Container(
+                                  width: 38,
+                                  height: 38,
+                                  margin: const EdgeInsets.only(right: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surface,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: AppColors.border,
+                                      width: 1.0,
                                     ),
-                                    child: const Icon(
-                                      Icons.arrow_back_ios_new_rounded,
-                                      color: AppColors.creamText,
-                                      size: 16,
-                                    ),
+                                    boxShadow: AppShadows.card,
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    color: AppColors.textPrimary,
+                                    size: 16,
                                   ),
                                 ),
-                              ],
+                              ),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       zone.title,
-                                      style: AppTextStyles.displayLarge.copyWith(
-                                        color: AppColors.creamText,
-                                        fontSize: 24,
+                                      style: GoogleFonts.fraunces(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 22,
                                         fontWeight: FontWeight.w700,
                                         letterSpacing: -0.3,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 2),
                                     Text(
                                       zone.subtitle,
                                       style: AppTextStyles.bodyMedium.copyWith(
-                                        color: AppColors.textMutedDark,
-                                        fontSize: 13.5,
-                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.textSecondary,
+                                        fontSize: 13,
                                       ),
                                     ),
                                   ],
@@ -139,20 +148,21 @@ class TiffinZoneView extends StatelessWidget {
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 11,
-                                  vertical: 6,
+                                  horizontal: 10,
+                                  vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
+                                  color: AppColors.primaryLight,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: AppColors.cardGoldAccent,
-                                    width: 0.9,
+                                    color: AppColors.primary.withValues(alpha: 0.3),
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: Text(
                                   zone.radiusBadge,
-                                  style: AppTextStyles.caption.copyWith(
-                                    color: AppColors.cardGoldAccent,
+                                  style: GoogleFonts.inter(
+                                    color: AppColors.primary,
                                     fontSize: 10.5,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 0.4,
@@ -177,7 +187,7 @@ class TiffinZoneView extends StatelessWidget {
                                 child: _buildStatCard(
                                   label: 'Subscribers',
                                   value: zone.subscribersCount,
-                                  valueColor: AppColors.cardGoldAccent,
+                                  valueColor: AppColors.primary,
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -185,7 +195,7 @@ class TiffinZoneView extends StatelessWidget {
                                 child: _buildStatCard(
                                   label: "Today's Runs",
                                   value: zone.todayRuns,
-                                  valueColor: AppColors.creamText,
+                                  valueColor: AppColors.textPrimary,
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -193,7 +203,7 @@ class TiffinZoneView extends StatelessWidget {
                                 child: _buildStatCard(
                                   label: 'Completed',
                                   value: zone.completedRuns,
-                                  valueColor: const Color(0xFF00E676),
+                                  valueColor: AppColors.successDark,
                                 ),
                               ),
                             ],
@@ -203,9 +213,9 @@ class TiffinZoneView extends StatelessWidget {
                           // Section Title: "Today's Tiffin Route"
                           Text(
                             "Today's Tiffin Route",
-                            style: AppTextStyles.headingSmall.copyWith(
-                              color: AppColors.creamText,
-                              fontSize: 19,
+                            style: GoogleFonts.fraunces(
+                              color: AppColors.textPrimary,
+                              fontSize: 18,
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.2,
                             ),
@@ -214,7 +224,20 @@ class TiffinZoneView extends StatelessWidget {
 
                           // Route Cards List
                           ...zone.routeStops.map(
-                            (stop) => TiffinRouteCard(stop: stop),
+                            (stop) => TiffinRouteCard(
+                              stop: stop,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => TiffinDeliveryDetailScreen(
+                                      customerName: stop.customerName,
+                                      address: stop.address,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           const SizedBox(height: 12),
                         ],
@@ -235,20 +258,19 @@ class TiffinZoneView extends StatelessWidget {
                               .add(const StartTiffinRouteEvent());
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.cardGoldAccent,
-                          foregroundColor: const Color(0xFF11110F),
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
                           elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
                         ),
                         child: Text(
                           state.isRouteStarted
                               ? 'Route In Progress'
                               : 'Start Tiffin Route',
-                          style: AppTextStyles.button.copyWith(
-                            color: const Color(0xFF11110F),
-                            fontSize: 16,
+                          style: GoogleFonts.inter(
+                            fontSize: 15.5,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -269,25 +291,17 @@ class TiffinZoneView extends StatelessWidget {
     required String value,
     required Color valueColor,
   }) {
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFF171719),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: const Color(0xFF262628),
-          width: 0.8,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.textMutedDark,
+            style: GoogleFonts.inter(
+              color: AppColors.textSecondary,
               fontSize: 11.5,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -297,9 +311,9 @@ class TiffinZoneView extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               value,
-              style: AppTextStyles.displayLarge.copyWith(
+              style: GoogleFonts.fraunces(
                 color: valueColor,
-                fontSize: 18.5,
+                fontSize: 19,
                 fontWeight: FontWeight.w700,
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class NavigationDestinationSheet extends StatelessWidget {
   final String destinationTitle;
@@ -20,23 +21,21 @@ class NavigationDestinationSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 26),
       decoration: BoxDecoration(
-        color: const Color(0xFF141416),
+        color: AppColors.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(
+        border: const Border(
           top: BorderSide(
-            color: const Color(0xFF262628),
+            color: AppColors.border,
             width: 1.2,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.6),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, -6),
           ),
@@ -52,7 +51,7 @@ class NavigationDestinationSheet extends StatelessWidget {
             Text(
               'DELIVERY DESTINATION',
               style: GoogleFonts.inter(
-                color: goldColor,
+                color: AppColors.primary,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.8,
@@ -60,11 +59,11 @@ class NavigationDestinationSheet extends StatelessWidget {
             ),
             const SizedBox(height: 6),
 
-            // Destination Title (Fraunces Cream Serif)
+            // Destination Title (Fraunces Stone Charcoal Serif)
             Text(
               destinationTitle,
               style: GoogleFonts.fraunces(
-                color: AppColors.creamText,
+                color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.2,
@@ -76,7 +75,7 @@ class NavigationDestinationSheet extends StatelessWidget {
             Text(
               destinationDetails,
               style: GoogleFonts.inter(
-                color: const Color(0xFFA0A0A5),
+                color: AppColors.textSecondary,
                 fontSize: 13.5,
                 fontWeight: FontWeight.w400,
               ),
@@ -88,27 +87,22 @@ class NavigationDestinationSheet extends StatelessWidget {
               children: [
                 // "Open Google Maps" Button
                 Expanded(
-                  child: InkWell(
-                    onTap: onOpenMaps,
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C1E),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFF2E2E32),
-                          width: 1.2,
+                  child: SizedBox(
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed: onOpenMaps,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.textPrimary,
+                        side: const BorderSide(color: AppColors.border),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderLg,
                         ),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Open Google Maps',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 14.5,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      child: Text(
+                        'Open Google Maps',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -116,38 +110,27 @@ class NavigationDestinationSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
 
-                // "Mark Arrived" Gold CTA Button
+                // "Mark Arrived" Crimson CTA Button
                 Expanded(
-                  child: InkWell(
-                    onTap: onMarkArrived,
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: isArrived
-                            ? const Color(0xFF00E676)
-                            : goldColor,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: (isArrived
-                                    ? const Color(0xFF00E676)
-                                    : goldColor)
-                                .withValues(alpha: 0.25),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: onMarkArrived,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isArrived ? AppColors.success : AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderLg,
+                        ),
                       ),
-                      child: Center(
-                        child: Text(
-                          isArrived ? 'Arrived ✓' : 'Mark Arrived',
-                          style: GoogleFonts.inter(
-                            color: const Color(0xFF141416),
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.1,
-                          ),
+                      child: Text(
+                        isArrived ? 'Arrived ✓' : 'Mark Arrived',
+                        style: GoogleFonts.inter(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.1,
                         ),
                       ),
                     ),

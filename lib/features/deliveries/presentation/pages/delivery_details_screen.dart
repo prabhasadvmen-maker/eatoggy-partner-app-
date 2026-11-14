@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../bloc/delivery_details/delivery_details_bloc.dart';
 import '../../bloc/delivery_details/delivery_details_event.dart';
 import '../../bloc/delivery_details/delivery_details_state.dart';
 import '../widgets/customer_location_card.dart';
 import '../widgets/order_payload_card.dart';
 import 'active_navigation_screen.dart';
+import 'customer_call_screen.dart';
+import 'customer_chat_screen.dart';
 
 class DeliveryDetailsScreen extends StatelessWidget {
   final String orderId;
@@ -30,21 +33,18 @@ class DeliveryDetailsScreen extends StatelessWidget {
 class DeliveryDetailsView extends StatelessWidget {
   const DeliveryDetailsView({super.key});
 
-  static const Color _screenBg = Color(0xFF111111);
-  static const Color _goldColor = AppColors.cardGoldAccent;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _screenBg,
+      backgroundColor: AppColors.scaffoldBackground,
       appBar: AppBar(
-        backgroundColor: _screenBg,
+        backgroundColor: AppColors.surface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: _goldColor,
-            size: 24,
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+            size: 18,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -52,8 +52,8 @@ class DeliveryDetailsView extends StatelessWidget {
         title: Text(
           'Delivery Details',
           style: GoogleFonts.fraunces(
-            color: AppColors.creamText,
-            fontSize: 21,
+            color: AppColors.textPrimary,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
           ),
@@ -67,9 +67,9 @@ class DeliveryDetailsView extends StatelessWidget {
                   child: Text(
                     state.details.orderId,
                     style: GoogleFonts.inter(
-                      color: const Color(0xFF8E8E93),
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -77,6 +77,10 @@ class DeliveryDetailsView extends StatelessWidget {
             },
           ),
         ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(color: AppColors.border, height: 1),
+        ),
       ),
       body: BlocConsumer<DeliveryDetailsBloc, DeliveryDetailsState>(
         listener: (context, state) {
@@ -99,7 +103,7 @@ class DeliveryDetailsView extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 18,
-                    vertical: 12,
+                    vertical: 14,
                   ),
                   child: Column(
                     children: [
@@ -109,9 +113,25 @@ class DeliveryDetailsView extends StatelessWidget {
                         subscriptionType: details.subscriptionType,
                         address: details.deliveryLocation,
                         onCall: () {
-                          context
-                              .read<DeliveryDetailsBloc>()
-                              .add(const CallCustomerEvent());
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CustomerCallScreen(
+                                orderId: details.orderId,
+                              ),
+                            ),
+                          );
+                        },
+                        onChat: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CustomerChatScreen(
+                                customerName: details.customerName,
+                                orderId: details.orderId,
+                              ),
+                            ),
+                          );
                         },
                         onCopyAddress: () {
                           context
@@ -136,88 +156,87 @@ class DeliveryDetailsView extends StatelessWidget {
                 ),
               ),
 
-              // Bottom Action Buttons matching screenshot
+              // Bottom Action Buttons
               Container(
-                color: _screenBg,
-                padding: const EdgeInsets.fromLTRB(18, 10, 18, 24),
+                decoration: const BoxDecoration(
+                  color: AppColors.surface,
+                  border: Border(
+                    top: BorderSide(color: AppColors.border),
+                  ),
+                ),
+                padding: const EdgeInsets.fromLTRB(18, 12, 18, 20),
                 child: SafeArea(
                   top: false,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // "Confirm Pickup & Go" Gold CTA Button
-                      InkWell(
-                        onTap: () {
-                          context
-                              .read<DeliveryDetailsBloc>()
-                              .add(const ConfirmPickupEvent());
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ActiveNavigationScreen(
-                                orderId: details.orderId,
+                      // "Confirm Pickup & Go" CTA Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context
+                                .read<DeliveryDetailsBloc>()
+                                .add(const ConfirmPickupEvent());
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ActiveNavigationScreen(
+                                  orderId: details.orderId,
+                                ),
                               ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: AppRadius.borderLg,
                             ),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: double.infinity,
-                          height: 52,
-                          decoration: BoxDecoration(
-                            color: _goldColor,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: _goldColor.withValues(alpha: 0.2),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
                           ),
-                          child: Center(
-                            child: Text(
-                              details.isPickupConfirmed
-                                  ? 'Pickup Confirmed ✓'
-                                  : 'Confirm Pickup & Go',
-                              style: GoogleFonts.inter(
-                                color: const Color(0xFF141416),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.1,
-                              ),
+                          child: Text(
+                            details.isPickupConfirmed
+                                ? 'Pickup Confirmed ✓'
+                                : 'Confirm Pickup & Go',
+                            style: GoogleFonts.inter(
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
 
-                      // "Call" Secondary Dark Button
-                      InkWell(
-                        onTap: () {
-                          context
-                              .read<DeliveryDetailsBloc>()
-                              .add(const CallCustomerEvent());
-                        },
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF18181A),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: const Color(0xFF2E2E32),
-                              width: 1.2,
+                      // "Message Customer" Secondary Outlined Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CustomerChatScreen(
+                                  customerName: details.customerName,
+                                  orderId: details.orderId,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.chat_outlined, size: 18),
+                          label: Text(
+                            'Message Customer',
+                            style: GoogleFonts.inter(
+                              fontSize: 14.5,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              'Call',
-                              style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 15.5,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.textPrimary,
+                            side: const BorderSide(color: AppColors.border),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: AppRadius.borderLg,
                             ),
                           ),
                         ),

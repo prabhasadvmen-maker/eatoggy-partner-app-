@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class CustomerLocationCard extends StatelessWidget {
   final String customerName;
@@ -8,6 +9,7 @@ class CustomerLocationCard extends StatelessWidget {
   final String address;
   final VoidCallback onCall;
   final VoidCallback onCopyAddress;
+  final VoidCallback? onChat;
 
   const CustomerLocationCard({
     super.key,
@@ -16,83 +18,97 @@ class CustomerLocationCard extends StatelessWidget {
     required this.address,
     required this.onCall,
     required this.onCopyAddress,
+    this.onChat,
   });
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF262628),
-          width: 1,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Customer Info & Phone Action Row
+          // Customer Info & Actions Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    customerName,
-                    style: GoogleFonts.fraunces(
-                      color: AppColors.creamText,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.2,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      customerName,
+                      style: GoogleFonts.fraunces(
+                        color: AppColors.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    subscriptionType,
-                    style: GoogleFonts.inter(
-                      color: const Color(0xFF8E8E93),
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w400,
+                    const SizedBox(height: 4),
+                    StatusBadge(text: subscriptionType),
+                  ],
+                ),
+              ),
+
+              // Action Buttons: Call & Chat
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (onChat != null) ...[
+                    InkWell(
+                      onTap: onChat,
+                      borderRadius: BorderRadius.circular(22),
+                      child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceSubtle,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.chat_bubble_outline_rounded,
+                            color: AppColors.textPrimary,
+                            size: 19,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+
+                  // Phone Call Button
+                  InkWell(
+                    onTap: onCall,
+                    borderRadius: BorderRadius.circular(22),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.call_rounded,
+                          color: Colors.white,
+                          size: 19,
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-
-              // Phone Call Icon Button
-              InkWell(
-                onTap: onCall,
-                borderRadius: BorderRadius.circular(22),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF242018),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.call_outlined,
-                      color: goldColor,
-                      size: 21,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
 
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.symmetric(vertical: 14),
             child: Divider(
               height: 1,
-              thickness: 1,
-              color: Color(0xFF262628),
+              color: AppColors.border,
             ),
           ),
 
@@ -100,7 +116,7 @@ class CustomerLocationCard extends StatelessWidget {
           Text(
             'DELIVERY LOCATION',
             style: GoogleFonts.inter(
-              color: goldColor,
+              color: AppColors.primary,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
@@ -111,8 +127,8 @@ class CustomerLocationCard extends StatelessWidget {
           Text(
             address,
             style: GoogleFonts.inter(
-              color: Colors.white,
-              fontSize: 14.5,
+              color: AppColors.textPrimary,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
               height: 1.4,
             ),
@@ -128,15 +144,15 @@ class CustomerLocationCard extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.copy_rounded,
-                  color: goldColor,
+                  color: AppColors.textSecondary,
                   size: 16,
                 ),
                 const SizedBox(width: 6),
                 Text(
                   'Copy Address',
                   style: GoogleFonts.inter(
-                    color: goldColor,
-                    fontSize: 13.5,
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/widgets/common_widgets.dart';
 import '../bloc/document_verification_bloc.dart';
 
 class DocumentVerificationScreen extends StatelessWidget {
@@ -34,10 +36,9 @@ class DocumentVerificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    const borderColor = AppColors.darkBorder;
-    const cardBgColor = AppColors.darkSurface;
+    const bgColor = AppColors.background;
+    const borderColor = AppColors.border;
+    const cardBgColor = AppColors.surface;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -49,31 +50,27 @@ class DocumentVerificationView extends StatelessWidget {
             }
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.5.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 1.h),
 
                 // STEP 1 OF 3
-                Text(
-                  'STEP 1 OF 3',
-                  style: AppTextStyles.label,
-                ),
-                SizedBox(height: 1.h),
+                const StepIndicator(currentStep: 1, totalSteps: 3),
+                SizedBox(height: 1.2.h),
 
                 // Verify your identity
                 Text(
                   'Verify your identity',
                   style: AppTextStyles.displayLarge,
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 1.2.h),
 
                 // Subtitle
                 Text(
                   'Upload clear copies of your government-issued documents. Your information stays encrypted and secure.',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
                     height: 1.4,
                   ),
                 ),
@@ -91,14 +88,15 @@ class DocumentVerificationView extends StatelessWidget {
                             .add(const UploadAadhaarFromCamera());
                       },
                       child: Container(
-                        padding: EdgeInsets.all(4.w),
+                        padding: EdgeInsets.all(4.5.w),
                         decoration: BoxDecoration(
                           color: cardBgColor,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: AppRadius.borderLg,
                           border: Border.all(
                             color: isUploaded ? AppColors.success : borderColor,
-                            width: isUploaded ? 1.5 : 1.0,
+                            width: isUploaded ? 1.5 : 1.2,
                           ),
+                          boxShadow: AppShadows.card,
                         ),
                         child: Row(
                           children: [
@@ -106,12 +104,16 @@ class DocumentVerificationView extends StatelessWidget {
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.05),
+                                color: isUploaded
+                                    ? AppColors.successLight
+                                    : AppColors.primaryLight,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.badge_outlined,
-                                color: goldColor,
+                                color: isUploaded
+                                    ? AppColors.success
+                                    : AppColors.primary,
                                 size: 24,
                               ),
                             ),
@@ -122,10 +124,7 @@ class DocumentVerificationView extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Aadhaar card',
-                                    style: AppTextStyles.titleMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    style: AppTextStyles.titleMedium,
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -134,25 +133,28 @@ class DocumentVerificationView extends StatelessWidget {
                                         : 'Tap to capture Aadhaar card (Camera)',
                                     style: AppTextStyles.caption.copyWith(
                                       color: isUploaded
-                                          ? AppColors.success
-                                          : Colors.white54,
+                                          ? AppColors.successText
+                                          : AppColors.textSecondary,
+                                      fontWeight: isUploaded
+                                          ? FontWeight.w600
+                                          : FontWeight.normal,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              width: 28,
-                              height: 28,
+                              width: 30,
+                              height: 30,
                               decoration: BoxDecoration(
                                 color: isUploaded
                                     ? AppColors.success
-                                    : Colors.white.withValues(alpha: 0.1),
+                                    : AppColors.surfaceSubtle,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 isUploaded ? Icons.check : Icons.camera_alt_outlined,
-                                color: isUploaded ? Colors.white : goldColor,
+                                color: isUploaded ? Colors.white : AppColors.textSecondary,
                                 size: 16,
                               ),
                             ),
@@ -176,14 +178,15 @@ class DocumentVerificationView extends StatelessWidget {
                             .add(const UploadPanFromCamera());
                       },
                       child: Container(
-                        padding: EdgeInsets.all(4.w),
+                        padding: EdgeInsets.all(4.5.w),
                         decoration: BoxDecoration(
                           color: cardBgColor,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: AppRadius.borderLg,
                           border: Border.all(
                             color: isUploaded ? AppColors.success : borderColor,
-                            width: isUploaded ? 1.5 : 1.0,
+                            width: isUploaded ? 1.5 : 1.2,
                           ),
+                          boxShadow: AppShadows.card,
                         ),
                         child: Row(
                           children: [
@@ -191,12 +194,16 @@ class DocumentVerificationView extends StatelessWidget {
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.05),
+                                color: isUploaded
+                                    ? AppColors.successLight
+                                    : AppColors.primaryLight,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.assignment_ind_outlined,
-                                color: goldColor,
+                                color: isUploaded
+                                    ? AppColors.success
+                                    : AppColors.primary,
                                 size: 24,
                               ),
                             ),
@@ -207,10 +214,7 @@ class DocumentVerificationView extends StatelessWidget {
                                 children: [
                                   Text(
                                     'PAN card',
-                                    style: AppTextStyles.titleMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    style: AppTextStyles.titleMedium,
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -219,25 +223,28 @@ class DocumentVerificationView extends StatelessWidget {
                                         : 'Tap to upload your PAN card',
                                     style: AppTextStyles.caption.copyWith(
                                       color: isUploaded
-                                          ? AppColors.success
-                                          : Colors.white54,
+                                          ? AppColors.successText
+                                          : AppColors.textSecondary,
+                                      fontWeight: isUploaded
+                                          ? FontWeight.w600
+                                          : FontWeight.normal,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              width: 28,
-                              height: 28,
+                              width: 30,
+                              height: 30,
                               decoration: BoxDecoration(
                                 color: isUploaded
                                     ? AppColors.success
-                                    : Colors.white.withValues(alpha: 0.05),
+                                    : AppColors.surfaceSubtle,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 isUploaded ? Icons.check : Icons.file_upload_outlined,
-                                color: isUploaded ? Colors.white : goldColor,
+                                color: isUploaded ? Colors.white : AppColors.textSecondary,
                                 size: 16,
                               ),
                             ),
@@ -255,27 +262,35 @@ class DocumentVerificationView extends StatelessWidget {
                   width: double.infinity,
                   padding: EdgeInsets.all(4.w),
                   decoration: BoxDecoration(
-                    color: goldColor.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(14),
+                    color: AppColors.surfaceSubtle,
+                    borderRadius: AppRadius.borderLg,
                     border: Border.all(
-                      color: goldColor.withValues(alpha: 0.15),
+                      color: AppColors.border,
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Before you upload',
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: goldColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.info_outline_rounded,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Before you upload',
+                            style: AppTextStyles.titleMedium.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 1.h),
                       Text(
                         'Make sure all four corners are visible and the details are clear.\nAccepted formats: JPG, PNG or PDF.',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: Colors.white70,
                           fontSize: 12.sp,
                           height: 1.4,
                         ),
@@ -304,7 +319,7 @@ class DocumentVerificationView extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 4.h),
+                SizedBox(height: 3.h),
 
                 // Security note
                 Center(
@@ -319,61 +334,49 @@ class DocumentVerificationView extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         'Documents are protected with bank-grade encryption',
-                        style: AppTextStyles.caption.copyWith(
-                          color: Colors.white54,
-                          fontSize: 12.sp,
-                        ),
+                        style: AppTextStyles.caption,
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 2.h),
+                SizedBox(height: 2.5.h),
 
-                // Continue to Banking Button
+                // Continue to Banking Button (Solid Crimson Red)
                 BlocBuilder<DocumentVerificationBloc, DocumentVerificationState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              context.read<DocumentVerificationBloc>().add(
-                                    const DocumentVerificationSubmitted(),
-                                  );
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.buttonHeight,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                context.read<DocumentVerificationBloc>().add(
+                                      const DocumentVerificationSubmitted(),
+                                    );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.textLight,
+                          elevation: 0,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Continue to Banking',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Continue to Banking',
+                                style: AppTextStyles.button,
+                              ),
                       ),
                     );
                   },

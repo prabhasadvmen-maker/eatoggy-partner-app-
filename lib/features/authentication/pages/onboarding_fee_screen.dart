@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/widgets/common_widgets.dart';
 import '../bloc/onboarding_fee_bloc.dart';
 
 class OnboardingFeeScreen extends StatelessWidget {
@@ -34,13 +36,8 @@ class OnboardingFeeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = AppColors.darkBackground;
-    const goldColor = AppColors.goldFont;
-    const borderColor = AppColors.darkBorder;
-    const cardBgColor = AppColors.darkSurface;
-
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: AppColors.scaffoldBackground,
       body: SafeArea(
         child: BlocListener<OnboardingFeeBloc, OnboardingFeeState>(
           listener: (context, state) {
@@ -56,10 +53,7 @@ class OnboardingFeeView extends StatelessWidget {
                 SizedBox(height: 1.h),
 
                 // STEP 3 OF 3
-                Text(
-                  'STEP 3 OF 3',
-                  style: AppTextStyles.label,
-                ),
+                const StepIndicator(currentStep: 3, totalSteps: 3),
                 SizedBox(height: 1.h),
 
                 // Complete onboarding
@@ -73,7 +67,7 @@ class OnboardingFeeView extends StatelessWidget {
                 Text(
                   'A one-time onboarding fee activates your partner account and unlocks all earning tools.',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white70,
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -81,13 +75,8 @@ class OnboardingFeeView extends StatelessWidget {
                 SizedBox(height: 3.5.h),
 
                 // Fee Details Card Container
-                Container(
+                AppCard(
                   padding: EdgeInsets.all(5.w),
-                  decoration: BoxDecoration(
-                    color: cardBgColor,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: borderColor),
-                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,8 +90,8 @@ class OnboardingFeeView extends StatelessWidget {
                             children: [
                               Text(
                                 'ONE-TIME FEE',
-                                style: AppTextStyles.caption.copyWith(
-                                  color: goldColor,
+                                style: AppTextStyles.label.copyWith(
+                                  color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
                                   fontSize: 11.sp,
@@ -112,7 +101,7 @@ class OnboardingFeeView extends StatelessWidget {
                               Text(
                                 '₹499',
                                 style: AppTextStyles.displayLarge.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontSize: 26.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -123,12 +112,13 @@ class OnboardingFeeView extends StatelessWidget {
                             width: 46,
                             height: 46,
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.05),
+                              color: AppColors.surfaceSubtle,
                               shape: BoxShape.circle,
+                              border: Border.all(color: AppColors.border),
                             ),
                             child: const Icon(
                               Icons.lock_outline_rounded,
-                              color: goldColor,
+                              color: AppColors.textPrimary,
                               size: 22,
                             ),
                           ),
@@ -136,7 +126,7 @@ class OnboardingFeeView extends StatelessWidget {
                       ),
 
                       SizedBox(height: 2.5.h),
-                      Divider(color: borderColor.withValues(alpha: 0.6), height: 1),
+                      const Divider(color: AppColors.border, height: 1),
                       SizedBox(height: 2.5.h),
 
                       // Breakdown Item 1: Partner onboarding
@@ -146,13 +136,14 @@ class OnboardingFeeView extends StatelessWidget {
                           Text(
                             'Partner onboarding',
                             style: AppTextStyles.bodyLarge.copyWith(
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             '₹499',
                             style: AppTextStyles.bodyLarge.copyWith(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -168,7 +159,7 @@ class OnboardingFeeView extends StatelessWidget {
                           Text(
                             'GST included',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: Colors.white54,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           Text(
@@ -182,7 +173,7 @@ class OnboardingFeeView extends StatelessWidget {
                       ),
 
                       SizedBox(height: 2.5.h),
-                      Divider(color: borderColor.withValues(alpha: 0.6), height: 1),
+                      const Divider(color: AppColors.border, height: 1),
                       SizedBox(height: 2.5.h),
 
                       // Total Payable Row
@@ -192,14 +183,14 @@ class OnboardingFeeView extends StatelessWidget {
                           Text(
                             'Total payable',
                             style: AppTextStyles.titleMedium.copyWith(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
                             '₹499',
                             style: AppTextStyles.titleMedium.copyWith(
-                              color: Colors.white,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 16.sp,
                             ),
@@ -219,7 +210,7 @@ class OnboardingFeeView extends StatelessWidget {
                 SizedBox(height: 1.5.h),
                 _buildBenefitItem('Dedicated partner support'),
 
-                SizedBox(height: 6.h),
+                SizedBox(height: 5.h),
 
                 // Secure payment badge
                 Center(
@@ -235,8 +226,8 @@ class OnboardingFeeView extends StatelessWidget {
                       Text(
                         'Secure payment powered by trusted payment partners',
                         style: AppTextStyles.caption.copyWith(
-                          color: Colors.white54,
-                          fontSize: 11.sp,
+                          color: AppColors.textSecondary,
+                          fontSize: 10.sp,
                         ),
                       ),
                     ],
@@ -248,45 +239,41 @@ class OnboardingFeeView extends StatelessWidget {
                 // Pay ₹499 & Complete Button
                 BlocBuilder<OnboardingFeeBloc, OnboardingFeeState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.isSubmitting
-                          ? null
-                          : () {
-                              context.read<OnboardingFeeBloc>().add(const PaymentSubmitted());
-                            },
-                      child: Container(
-                        height: 54,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          gradient: const LinearGradient(
-                            colors: [AppColors.goldGradientStart, AppColors.goldGradientEnd],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 54,
+                      child: ElevatedButton(
+                        onPressed: state.isSubmitting
+                            ? null
+                            : () {
+                                context
+                                    .read<OnboardingFeeBloc>()
+                                    .add(const PaymentSubmitted());
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderLg,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: goldColor.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
+                          elevation: 0,
                         ),
-                        child: Center(
-                          child: state.isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.darkBackground,
-                                  ),
-                                )
-                              : Text(
-                                  'Pay ₹499 & Complete',
-                                  style: AppTextStyles.button,
+                        child: state.isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Pay ₹499 & Complete',
+                                style: AppTextStyles.button.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
                       ),
                     );
                   },
@@ -299,8 +286,8 @@ class OnboardingFeeView extends StatelessWidget {
                   child: Text(
                     "By continuing, you agree to EATOGGY's Terms of Service & Privacy Policy.",
                     style: AppTextStyles.caption.copyWith(
-                      color: Colors.white38,
-                      fontSize: 11.sp,
+                      color: AppColors.textTertiary,
+                      fontSize: 10.sp,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -322,12 +309,12 @@ class OnboardingFeeView extends StatelessWidget {
           width: 24,
           height: 24,
           decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: 0.15),
+            color: AppColors.successLight,
             shape: BoxShape.circle,
           ),
           child: const Icon(
             Icons.check,
-            color: AppColors.success,
+            color: AppColors.successText,
             size: 15,
           ),
         ),
@@ -335,8 +322,8 @@ class OnboardingFeeView extends StatelessWidget {
         Text(
           title,
           style: AppTextStyles.bodyLarge.copyWith(
-            color: Colors.white.withValues(alpha: 0.9),
-            fontSize: 14.sp,
+            color: AppColors.textPrimary,
+            fontSize: 13.sp,
           ),
         ),
       ],

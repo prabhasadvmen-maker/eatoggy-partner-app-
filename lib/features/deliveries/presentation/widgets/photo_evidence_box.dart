@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class PhotoEvidenceBox extends StatelessWidget {
   final String? imagePath;
@@ -28,10 +29,10 @@ class PhotoEvidenceBox extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: const Color(0xFF2E2020),
+            backgroundColor: AppColors.surface,
             content: Text(
               'Could not access ${source == ImageSource.camera ? 'camera' : 'gallery'}: $e',
-              style: GoogleFonts.inter(color: AppColors.creamText, fontSize: 13),
+              style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 13),
             ),
           ),
         );
@@ -42,10 +43,10 @@ class PhotoEvidenceBox extends StatelessWidget {
   void _showImageSourcePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1C1C1A),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        side: BorderSide(color: Color(0xFF2E2E2A)),
+        side: BorderSide(color: AppColors.border),
       ),
       builder: (sheetContext) => SafeArea(
         child: Padding(
@@ -56,23 +57,23 @@ class PhotoEvidenceBox extends StatelessWidget {
               Text(
                 'Attach Photo Evidence',
                 style: GoogleFonts.fraunces(
-                  color: AppColors.creamText,
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.camera_alt_rounded, color: AppColors.cardGoldAccent),
-                title: Text('Take Photo with Camera', style: GoogleFonts.inter(color: Colors.white)),
+                leading: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
+                title: Text('Take Photo with Camera', style: GoogleFonts.inter(color: AppColors.textPrimary)),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickImage(context, ImageSource.camera);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library_rounded, color: AppColors.cardGoldAccent),
-                title: Text('Choose from Gallery', style: GoogleFonts.inter(color: Colors.white)),
+                leading: const Icon(Icons.photo_library_rounded, color: AppColors.primary),
+                title: Text('Choose from Gallery', style: GoogleFonts.inter(color: AppColors.textPrimary)),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickImage(context, ImageSource.gallery);
@@ -92,14 +93,13 @@ class PhotoEvidenceBox extends StatelessWidget {
         height: 120,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFF181816),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.cardGoldAccent, width: 1.2),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
+          border: Border.all(color: AppColors.primary, width: 1.5),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
-            // Image Preview (tapping allows re-uploading directly)
             Positioned.fill(
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
@@ -108,16 +108,16 @@ class PhotoEvidenceBox extends StatelessWidget {
                   File(imagePath!),
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: const Color(0xFF222220),
+                    color: AppColors.surfaceSubtle,
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.broken_image, color: Colors.white54, size: 28),
+                        const Icon(Icons.broken_image, color: AppColors.textSecondary, size: 28),
                         const SizedBox(height: 4),
                         Text(
                           'Tap to re-upload',
-                          style: GoogleFonts.inter(color: Colors.white70, fontSize: 12),
+                          style: GoogleFonts.inter(color: AppColors.textSecondary, fontSize: 12),
                         ),
                       ],
                     ),
@@ -125,8 +125,6 @@ class PhotoEvidenceBox extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Bottom bar: Tap to change / re-upload
             Positioned(
               left: 0,
               right: 0,
@@ -140,12 +138,12 @@ class PhotoEvidenceBox extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.camera_alt_rounded, color: AppColors.cardGoldAccent, size: 14),
+                      const Icon(Icons.camera_alt_rounded, color: Colors.white, size: 14),
                       const SizedBox(width: 6),
                       Text(
                         'Tap to change / re-upload photo',
                         style: GoogleFonts.inter(
-                          color: AppColors.creamText,
+                          color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -155,8 +153,6 @@ class PhotoEvidenceBox extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Top-right Red Cross button to remove photo
             Positioned(
               top: 6,
               right: 6,
@@ -166,21 +162,17 @@ class PhotoEvidenceBox extends StatelessWidget {
                   onImageSelected(null);
                 },
                 child: Container(
-                  width: 36,
-                  height: 36,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.8),
+                    color: Colors.black.withValues(alpha: 0.7),
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFF444440),
-                      width: 1.0,
-                    ),
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.close,
-                      color: AppColors.error,
-                      size: 20,
+                      color: Colors.white,
+                      size: 18,
                     ),
                   ),
                 ),
@@ -193,34 +185,34 @@ class PhotoEvidenceBox extends StatelessWidget {
 
     return InkWell(
       onTap: () => _showImageSourcePicker(context),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppRadius.borderLg,
       child: Container(
         height: 96,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFF161615),
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
-            color: const Color(0xFF2E2E2A),
-            style: BorderStyle.solid,
+            color: AppColors.border,
             width: 1.2,
           ),
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
-              Icons.no_photography_outlined,
-              color: Color(0xFF71717A),
+              Icons.camera_alt_outlined,
+              color: AppColors.primary,
               size: 26,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
-              'Take/Upload photo evidence',
+              'Take / Upload photo evidence',
               style: GoogleFonts.inter(
-                color: const Color(0xFF71717A),
+                color: AppColors.textSecondary,
                 fontSize: 13,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

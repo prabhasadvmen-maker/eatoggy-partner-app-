@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class TourEstimatedTimeCard extends StatelessWidget {
   final String estimatedTimeLeft;
@@ -14,19 +15,8 @@ class TourEstimatedTimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const goldColor = AppColors.cardGoldAccent;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1C),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: goldColor,
-          width: 1.2,
-        ),
-      ),
+    return AppCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -37,7 +27,7 @@ class TourEstimatedTimeCard extends StatelessWidget {
               Text(
                 'ESTIMATED TIME',
                 style: GoogleFonts.inter(
-                  color: goldColor,
+                  color: AppColors.primary,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.8,
@@ -47,7 +37,7 @@ class TourEstimatedTimeCard extends StatelessWidget {
               Text(
                 estimatedTimeLeft,
                 style: GoogleFonts.fraunces(
-                  color: AppColors.creamText,
+                  color: AppColors.textPrimary,
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
@@ -56,21 +46,22 @@ class TourEstimatedTimeCard extends StatelessWidget {
             ],
           ),
 
-          // Right: Circular Gold Close Icon Button
+          // Right: Circular Close Icon Button
           GestureDetector(
             onTap: onClose,
             child: Container(
-              width: 44,
-              height: 44,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD4A24E),
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceSubtle,
                 shape: BoxShape.circle,
+                border: Border.all(color: AppColors.border),
               ),
               child: const Center(
                 child: Icon(
                   Icons.close_rounded,
-                  color: Color(0xFF1A1408),
-                  size: 24,
+                  color: AppColors.textPrimary,
+                  size: 20,
                 ),
               ),
             ),

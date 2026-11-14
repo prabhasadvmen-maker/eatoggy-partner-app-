@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class OtpDigitBox extends StatelessWidget {
   final String digit;
@@ -18,50 +19,45 @@ class OtpDigitBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Exact visual matching with reference UI:
-    // When filled: dark rounded box with subtle dark border and bold cream digit
-    // When focused or waiting for input: highlighted with elegant gold border and dash '-'
     final bool showDash = !isFilled;
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 72,
-        height: 76,
+        width: 68,
+        height: 72,
         decoration: BoxDecoration(
-          color: const Color(0xFF1C1C1A),
-          borderRadius: BorderRadius.circular(18),
+          color: AppColors.surface,
+          borderRadius: AppRadius.borderLg,
           border: Border.all(
             color: isFocused
-                ? AppColors.cardGoldAccent
-                : (isFilled
-                    ? const Color(0xFF2E2E2A)
-                    : AppColors.cardGoldAccent.withValues(alpha: 0.7)),
-            width: isFocused ? 2.0 : 1.4,
+                ? AppColors.primary
+                : (isFilled ? AppColors.textPrimary : AppColors.border),
+            width: isFocused ? 2.0 : 1.2,
           ),
           boxShadow: isFocused
               ? [
                   BoxShadow(
-                    color: AppColors.cardGoldAccent.withValues(alpha: 0.25),
-                    blurRadius: 12,
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
                 ]
-              : null,
+              : AppShadows.card,
         ),
         alignment: Alignment.center,
         child: Text(
           showDash ? '—' : digit,
           style: showDash
               ? GoogleFonts.inter(
-                  color: AppColors.cardGoldAccent.withValues(alpha: 0.6),
-                  fontSize: 26,
+                  color: AppColors.textPlaceholder,
+                  fontSize: 24,
                   fontWeight: FontWeight.w400,
                 )
               : GoogleFonts.fraunces(
-                  color: AppColors.creamText,
-                  fontSize: 32,
+                  color: AppColors.textPrimary,
+                  fontSize: 30,
                   fontWeight: FontWeight.w700,
                 ),
         ),

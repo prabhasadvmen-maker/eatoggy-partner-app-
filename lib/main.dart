@@ -17,9 +17,9 @@ class EatoggyApp extends StatelessWidget {
         return MaterialApp.router(
           title: 'EATOGGY',
           debugShowCheckedModeBanner: false,
-          themeMode: ThemeMode.dark,
-          darkTheme: AppTheme.darkTheme,
-          theme: AppTheme.darkTheme,
+          themeMode: ThemeMode.light,
+          darkTheme: AppTheme.lightTheme,
+          theme: AppTheme.lightTheme,
           routerConfig: AppRouter.router,
         );
       },
